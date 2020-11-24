@@ -6,6 +6,7 @@ Resultados de lógica intuicionista.
 *)
 
 (*
+Doble negación vs implicación
 *)
 Lemma DobleNegacion_Implicacion_LI : 
 forall A B : Prop, 
@@ -22,15 +23,13 @@ Proof.
     contradiction.
   - intros.
     (* Esta parte de la prueba es la sugerencia *)
-    apply H.
-    + intro. 
-      apply H0.
-      intro. 
-      contradiction.
-    + intro.
-      apply H0.
-      intro.
-      assumption.
+    apply H;
+      intro;
+      apply H0;
+      intro;
+      (*Se generan dos metas, en la primera hay una contradicci
+      y en la segunda es una hipotesis*)
+      contradiction || assumption.
 Qed.
 
 

@@ -1,225 +1,569 @@
-DIGEST c9cc310a3fd28cbbce0b08db9a44a46c
+DIGEST 400cf21f2fea5cd892fc7627b6350bd3
 FTAREA2.Props_LC
 R132:150 Coq.Logic.Classical <> <> lib
 R180:185 TAREA2.Def_LC <> <> lib
-prf 259:269 <> Doble_Negac
-binder 281:281 <> A:1
-R297:301 Coq.Init.Logic <> ::type_scope:x_'<->'_x not
-R292:293 Coq.Init.Logic <> ::type_scope:'~'_x not
-R294:295 Coq.Init.Logic <> ::type_scope:'~'_x not
-R296:296 TAREA2.Props_LC <> A:1 var
-R302:302 TAREA2.Props_LC <> A:1 var
-R332:335 Coq.Logic.Classical_Prop <> NNPP thm
-R332:335 Coq.Logic.Classical_Prop <> NNPP thm
-R349:359 Coq.Logic.Classical_Prop <> or_to_imply thm
-R364:365 Coq.Init.Logic <> ::type_scope:'~'_x not
-R366:367 Coq.Init.Logic <> ::type_scope:'~'_x not
-R349:359 Coq.Logic.Classical_Prop <> or_to_imply thm
-R364:365 Coq.Init.Logic <> ::type_scope:'~'_x not
-R366:367 Coq.Init.Logic <> ::type_scope:'~'_x not
-R384:390 Coq.Logic.Classical_Prop <> classic prfax
-R393:393 Coq.Init.Logic <> ::type_scope:'~'_x not
-R384:390 Coq.Logic.Classical_Prop <> classic prfax
-R393:393 Coq.Init.Logic <> ::type_scope:'~'_x not
-prf 411:432 <> Disyuncion_implicacion
-binder 444:444 <> A:2
-binder 446:446 <> B:3
-R456:456 Coq.Init.Logic <> ::type_scope:x_'<->'_x not
-R463:469 Coq.Init.Logic <> ::type_scope:x_'<->'_x not
-R477:477 Coq.Init.Logic <> ::type_scope:x_'<->'_x not
-R458:461 Coq.Init.Logic <> ::type_scope:x_'->'_x not
-R462:462 TAREA2.Props_LC <> B:3 var
-R457:457 TAREA2.Props_LC <> A:2 var
-R472:475 Coq.Init.Logic <> ::type_scope:x_'\/'_x not
-R470:470 Coq.Init.Logic <> ::type_scope:'~'_x not
-R471:471 TAREA2.Props_LC <> A:2 var
-R476:476 TAREA2.Props_LC <> B:3 var
-R506:516 Coq.Logic.Classical_Prop <> imply_to_or thm
-R506:516 Coq.Logic.Classical_Prop <> imply_to_or thm
-R529:539 Coq.Logic.Classical_Prop <> or_to_imply thm
-R529:539 Coq.Logic.Classical_Prop <> or_to_imply thm
-prf 554:568 <> DeMorgan_and_or
+ax 198:198 <> a
+ax 218:218 <> m
+prf 400:410 <> Doble_Negac
+binder 422:422 <> A:3
+R438:442 Coq.Init.Logic <> ::type_scope:x_'<->'_x not
+R433:434 Coq.Init.Logic <> ::type_scope:'~'_x not
+R435:436 Coq.Init.Logic <> ::type_scope:'~'_x not
+R437:437 TAREA2.Props_LC <> A:3 var
+R443:443 TAREA2.Props_LC <> A:3 var
+R473:476 Coq.Logic.Classical_Prop <> NNPP thm
+R473:476 Coq.Logic.Classical_Prop <> NNPP thm
+R490:500 Coq.Logic.Classical_Prop <> or_to_imply thm
+R505:506 Coq.Init.Logic <> ::type_scope:'~'_x not
+R507:508 Coq.Init.Logic <> ::type_scope:'~'_x not
+R490:500 Coq.Logic.Classical_Prop <> or_to_imply thm
+R505:506 Coq.Init.Logic <> ::type_scope:'~'_x not
+R507:508 Coq.Init.Logic <> ::type_scope:'~'_x not
+R525:531 Coq.Logic.Classical_Prop <> classic prfax
+R534:534 Coq.Init.Logic <> ::type_scope:'~'_x not
+R525:531 Coq.Logic.Classical_Prop <> classic prfax
+R534:534 Coq.Init.Logic <> ::type_scope:'~'_x not
+prf 552:568 <> Trans_Implicacion
 binder 580:580 <> A:4
 binder 582:582 <> B:5
-R593:593 Coq.Init.Logic <> ::type_scope:x_'<->'_x not
-R600:605 Coq.Init.Logic <> ::type_scope:x_'<->'_x not
-R595:598 Coq.Init.Logic <> ::type_scope:x_'/\'_x not
-R594:594 TAREA2.Props_LC <> A:4 var
-R599:599 TAREA2.Props_LC <> B:5 var
-R606:608 Coq.Init.Logic <> ::type_scope:'~'_x not
-R617:617 Coq.Init.Logic <> ::type_scope:'~'_x not
-R611:614 Coq.Init.Logic <> ::type_scope:x_'\/'_x not
-R609:609 Coq.Init.Logic <> ::type_scope:'~'_x not
-R610:610 TAREA2.Props_LC <> A:4 var
-R615:615 Coq.Init.Logic <> ::type_scope:'~'_x not
-R616:616 TAREA2.Props_LC <> B:5 var
-R658:667 Coq.Logic.Classical_Prop <> and_not_or thm
-R658:667 Coq.Logic.Classical_Prop <> and_not_or thm
-R690:700 TAREA2.Props_LC <> Doble_Negac thm
-R690:700 TAREA2.Props_LC <> Doble_Negac thm
-R690:700 TAREA2.Props_LC <> Doble_Negac thm
-R690:700 TAREA2.Props_LC <> Doble_Negac thm
-R690:700 TAREA2.Props_LC <> Doble_Negac thm
-R740:749 Coq.Logic.Classical_Prop <> not_or_and thm
-R740:749 Coq.Logic.Classical_Prop <> not_or_and thm
-R777:787 TAREA2.Props_LC <> Doble_Negac thm
-R777:787 TAREA2.Props_LC <> Doble_Negac thm
-R777:787 TAREA2.Props_LC <> Doble_Negac thm
-R777:787 TAREA2.Props_LC <> Doble_Negac thm
-R777:787 TAREA2.Props_LC <> Doble_Negac thm
-prf 829:843 <> Cotenable_Conmt
-binder 855:855 <> A:6
-binder 857:857 <> B:7
-R873:877 Coq.Init.Logic <> ::type_scope:x_'<->'_x not
-R868:871 TAREA2.Def_LC <> :::x_'°'_x not
-R867:867 TAREA2.Props_LC <> A:6 var
-R872:872 TAREA2.Props_LC <> B:7 var
-R879:882 TAREA2.Def_LC <> :::x_'°'_x not
-R878:878 TAREA2.Props_LC <> B:7 var
-R883:883 TAREA2.Props_LC <> A:6 var
-R902:910 TAREA2.Def_LC <> cotenable def
-R941:962 TAREA2.Props_LC <> Disyuncion_implicacion thm
-R941:962 TAREA2.Props_LC <> Disyuncion_implicacion thm
-R941:962 TAREA2.Props_LC <> Disyuncion_implicacion thm
-R941:962 TAREA2.Props_LC <> Disyuncion_implicacion thm
-R941:962 TAREA2.Props_LC <> Disyuncion_implicacion thm
-R979:985 Coq.Init.Logic <> or_comm thm
-R993:993 Coq.Init.Logic <> ::type_scope:'~'_x not
-R988:988 Coq.Init.Logic <> ::type_scope:'~'_x not
-R979:985 Coq.Init.Logic <> or_comm thm
-R993:993 Coq.Init.Logic <> ::type_scope:'~'_x not
-R988:988 Coq.Init.Logic <> ::type_scope:'~'_x not
-R979:985 Coq.Init.Logic <> or_comm thm
-R993:993 Coq.Init.Logic <> ::type_scope:'~'_x not
-R988:988 Coq.Init.Logic <> ::type_scope:'~'_x not
-prf 1020:1033 <> Cotenable_Asoc
-binder 1045:1045 <> A:8
-binder 1047:1047 <> B:9
-binder 1049:1049 <> C:10
-R1073:1077 Coq.Init.Logic <> ::type_scope:x_'<->'_x not
-R1060:1060 TAREA2.Def_LC <> :::x_'°'_x not
-R1067:1071 TAREA2.Def_LC <> :::x_'°'_x not
-R1062:1065 TAREA2.Def_LC <> :::x_'°'_x not
-R1061:1061 TAREA2.Props_LC <> A:8 var
-R1066:1066 TAREA2.Props_LC <> B:9 var
-R1072:1072 TAREA2.Props_LC <> C:10 var
-R1079:1083 TAREA2.Def_LC <> :::x_'°'_x not
-R1090:1090 TAREA2.Def_LC <> :::x_'°'_x not
-R1078:1078 TAREA2.Props_LC <> A:8 var
-R1085:1088 TAREA2.Def_LC <> :::x_'°'_x not
-R1084:1084 TAREA2.Props_LC <> B:9 var
-R1089:1089 TAREA2.Props_LC <> C:10 var
-R1109:1117 TAREA2.Def_LC <> cotenable def
-R1148:1169 TAREA2.Props_LC <> Disyuncion_implicacion thm
-R1148:1169 TAREA2.Props_LC <> Disyuncion_implicacion thm
-R1148:1169 TAREA2.Props_LC <> Disyuncion_implicacion thm
-R1148:1169 TAREA2.Props_LC <> Disyuncion_implicacion thm
-R1148:1169 TAREA2.Props_LC <> Disyuncion_implicacion thm
-R1148:1169 TAREA2.Props_LC <> Disyuncion_implicacion thm
-R1148:1169 TAREA2.Props_LC <> Disyuncion_implicacion thm
-R1148:1169 TAREA2.Props_LC <> Disyuncion_implicacion thm
-R1148:1169 TAREA2.Props_LC <> Disyuncion_implicacion thm
-R1190:1200 TAREA2.Props_LC <> Doble_Negac thm
-R1190:1200 TAREA2.Props_LC <> Doble_Negac thm
-R1190:1200 TAREA2.Props_LC <> Doble_Negac thm
-R1190:1200 TAREA2.Props_LC <> Doble_Negac thm
-R1190:1200 TAREA2.Props_LC <> Doble_Negac thm
-R1217:1224 Coq.Init.Logic <> or_assoc thm
-R1232:1232 Coq.Init.Logic <> ::type_scope:'~'_x not
-R1227:1227 Coq.Init.Logic <> ::type_scope:'~'_x not
-R1217:1224 Coq.Init.Logic <> or_assoc thm
-R1232:1232 Coq.Init.Logic <> ::type_scope:'~'_x not
-R1227:1227 Coq.Init.Logic <> ::type_scope:'~'_x not
-R1217:1224 Coq.Init.Logic <> or_assoc thm
-R1232:1232 Coq.Init.Logic <> ::type_scope:'~'_x not
-R1227:1227 Coq.Init.Logic <> ::type_scope:'~'_x not
-prf 1259:1275 <> Cotenable_Dist_or
-binder 1287:1287 <> A:11
-binder 1289:1289 <> B:12
-binder 1291:1291 <> C:13
-R1301:1302 Coq.Init.Logic <> ::type_scope:x_'<->'_x not
-R1323:1331 Coq.Init.Logic <> ::type_scope:x_'<->'_x not
-R1345:1346 Coq.Init.Logic <> ::type_scope:x_'<->'_x not
-R1303:1303 Coq.Init.Logic <> ::type_scope:x_'\/'_x not
-R1310:1315 Coq.Init.Logic <> ::type_scope:x_'\/'_x not
-R1322:1322 Coq.Init.Logic <> ::type_scope:x_'\/'_x not
-R1305:1308 TAREA2.Def_LC <> :::x_'°'_x not
-R1304:1304 TAREA2.Props_LC <> A:11 var
-R1309:1309 TAREA2.Props_LC <> B:12 var
-R1317:1320 TAREA2.Def_LC <> :::x_'°'_x not
-R1316:1316 TAREA2.Props_LC <> A:11 var
-R1321:1321 TAREA2.Props_LC <> C:13 var
-R1333:1337 TAREA2.Def_LC <> :::x_'°'_x not
-R1344:1344 TAREA2.Def_LC <> :::x_'°'_x not
-R1332:1332 TAREA2.Props_LC <> A:11 var
-R1339:1342 Coq.Init.Logic <> ::type_scope:x_'\/'_x not
-R1338:1338 TAREA2.Props_LC <> B:12 var
-R1343:1343 TAREA2.Props_LC <> C:13 var
-R1365:1373 TAREA2.Def_LC <> cotenable def
-R1404:1425 TAREA2.Props_LC <> Disyuncion_implicacion thm
-R1404:1425 TAREA2.Props_LC <> Disyuncion_implicacion thm
-R1404:1425 TAREA2.Props_LC <> Disyuncion_implicacion thm
-R1404:1425 TAREA2.Props_LC <> Disyuncion_implicacion thm
-R1404:1425 TAREA2.Props_LC <> Disyuncion_implicacion thm
-R1404:1425 TAREA2.Props_LC <> Disyuncion_implicacion thm
-R1404:1425 TAREA2.Props_LC <> Disyuncion_implicacion thm
-R1446:1460 TAREA2.Props_LC <> DeMorgan_and_or thm
-R1446:1460 TAREA2.Props_LC <> DeMorgan_and_or thm
-R1446:1460 TAREA2.Props_LC <> DeMorgan_and_or thm
-R1446:1460 TAREA2.Props_LC <> DeMorgan_and_or thm
-R1446:1460 TAREA2.Props_LC <> DeMorgan_and_or thm
-R1446:1460 TAREA2.Props_LC <> DeMorgan_and_or thm
-R1446:1460 TAREA2.Props_LC <> DeMorgan_and_or thm
-prf 1484:1499 <> Cotenable_Fusion
-binder 1511:1511 <> A:14
-binder 1513:1513 <> B:15
-binder 1515:1515 <> C:16
-R1526:1526 Coq.Init.Logic <> ::type_scope:x_'<->'_x not
-R1538:1544 Coq.Init.Logic <> ::type_scope:x_'<->'_x not
-R1558:1558 Coq.Init.Logic <> ::type_scope:x_'<->'_x not
-R1528:1531 Coq.Init.Logic <> ::type_scope:x_'->'_x not
-R1533:1536 Coq.Init.Logic <> ::type_scope:x_'->'_x not
-R1537:1537 TAREA2.Props_LC <> C:16 var
-R1532:1532 TAREA2.Props_LC <> B:15 var
-R1527:1527 TAREA2.Props_LC <> A:14 var
-R1545:1545 Coq.Init.Logic <> ::type_scope:x_'->'_x not
-R1552:1556 Coq.Init.Logic <> ::type_scope:x_'->'_x not
-R1557:1557 TAREA2.Props_LC <> C:16 var
-R1547:1550 TAREA2.Def_LC <> :::x_'°'_x not
-R1546:1546 TAREA2.Props_LC <> A:14 var
-R1551:1551 TAREA2.Props_LC <> B:15 var
-R1577:1585 TAREA2.Def_LC <> cotenable def
-R1616:1637 TAREA2.Props_LC <> Disyuncion_implicacion thm
-R1616:1637 TAREA2.Props_LC <> Disyuncion_implicacion thm
-R1616:1637 TAREA2.Props_LC <> Disyuncion_implicacion thm
-R1616:1637 TAREA2.Props_LC <> Disyuncion_implicacion thm
-R1616:1637 TAREA2.Props_LC <> Disyuncion_implicacion thm
-R1616:1637 TAREA2.Props_LC <> Disyuncion_implicacion thm
-R1616:1637 TAREA2.Props_LC <> Disyuncion_implicacion thm
-R1616:1637 TAREA2.Props_LC <> Disyuncion_implicacion thm
-R1616:1637 TAREA2.Props_LC <> Disyuncion_implicacion thm
-R1653:1663 TAREA2.Props_LC <> Doble_Negac thm
-R1653:1663 TAREA2.Props_LC <> Doble_Negac thm
-R1653:1663 TAREA2.Props_LC <> Doble_Negac thm
-prf 1688:1708 <> Cotenable_Implicacion
-binder 1720:1720 <> A:17
-binder 1722:1722 <> B:18
-R1733:1733 Coq.Init.Logic <> ::type_scope:x_'<->'_x not
-R1740:1747 Coq.Init.Logic <> ::type_scope:x_'<->'_x not
-R1763:1764 Coq.Init.Logic <> ::type_scope:x_'<->'_x not
-R1735:1738 Coq.Init.Logic <> ::type_scope:x_'->'_x not
-R1739:1739 TAREA2.Props_LC <> B:18 var
-R1734:1734 TAREA2.Props_LC <> A:17 var
-R1748:1751 Coq.Init.Logic <> ::type_scope:'~'_x not
-R1761:1762 Coq.Init.Logic <> ::type_scope:'~'_x not
-R1753:1757 TAREA2.Def_LC <> :::x_'°'_x not
-R1760:1760 TAREA2.Def_LC <> :::x_'°'_x not
-R1752:1752 TAREA2.Props_LC <> A:17 var
-R1758:1758 Coq.Init.Logic <> ::type_scope:'~'_x not
-R1759:1759 TAREA2.Props_LC <> B:18 var
-R1783:1791 TAREA2.Def_LC <> cotenable def
-R1822:1832 TAREA2.Props_LC <> Doble_Negac thm
-R1822:1832 TAREA2.Props_LC <> Doble_Negac thm
-R1822:1832 TAREA2.Props_LC <> Doble_Negac thm
-R1822:1832 TAREA2.Props_LC <> Doble_Negac thm
-R1822:1832 TAREA2.Props_LC <> Doble_Negac thm
+binder 584:584 <> C:6
+R595:595 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R613:618 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R625:625 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R620:623 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R624:624 TAREA2.Props_LC <> C:6 var
+R619:619 TAREA2.Props_LC <> A:4 var
+R596:596 Coq.Init.Logic <> ::type_scope:x_'/\'_x not
+R601:606 Coq.Init.Logic <> ::type_scope:x_'/\'_x not
+R612:612 Coq.Init.Logic <> ::type_scope:x_'/\'_x not
+R598:599 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R600:600 TAREA2.Props_LC <> B:5 var
+R597:597 TAREA2.Props_LC <> A:4 var
+R608:610 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R611:611 TAREA2.Props_LC <> C:6 var
+R607:607 TAREA2.Props_LC <> B:5 var
+prf 714:735 <> Disyuncion_implicacion
+binder 747:747 <> A:7
+binder 749:749 <> B:8
+R759:759 Coq.Init.Logic <> ::type_scope:x_'<->'_x not
+R766:772 Coq.Init.Logic <> ::type_scope:x_'<->'_x not
+R780:780 Coq.Init.Logic <> ::type_scope:x_'<->'_x not
+R761:764 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R765:765 TAREA2.Props_LC <> B:8 var
+R760:760 TAREA2.Props_LC <> A:7 var
+R775:778 Coq.Init.Logic <> ::type_scope:x_'\/'_x not
+R773:773 Coq.Init.Logic <> ::type_scope:'~'_x not
+R774:774 TAREA2.Props_LC <> A:7 var
+R779:779 TAREA2.Props_LC <> B:8 var
+R809:819 Coq.Logic.Classical_Prop <> imply_to_or thm
+R809:819 Coq.Logic.Classical_Prop <> imply_to_or thm
+R832:842 Coq.Logic.Classical_Prop <> or_to_imply thm
+R832:842 Coq.Logic.Classical_Prop <> or_to_imply thm
+prf 863:876 <> Contrapositiva
+binder 888:888 <> A:9
+binder 890:890 <> B:10
+R900:900 Coq.Init.Logic <> ::type_scope:x_'<->'_x not
+R907:913 Coq.Init.Logic <> ::type_scope:x_'<->'_x not
+R922:922 Coq.Init.Logic <> ::type_scope:x_'<->'_x not
+R902:905 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R906:906 TAREA2.Props_LC <> B:10 var
+R901:901 TAREA2.Props_LC <> A:9 var
+R916:919 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R920:920 Coq.Init.Logic <> ::type_scope:'~'_x not
+R921:921 TAREA2.Props_LC <> A:9 var
+R914:914 Coq.Init.Logic <> ::type_scope:'~'_x not
+R915:915 TAREA2.Props_LC <> B:10 var
+R960:981 TAREA2.Props_LC <> Disyuncion_implicacion thm
+R960:981 TAREA2.Props_LC <> Disyuncion_implicacion thm
+R960:981 TAREA2.Props_LC <> Disyuncion_implicacion thm
+R960:981 TAREA2.Props_LC <> Disyuncion_implicacion thm
+R960:981 TAREA2.Props_LC <> Disyuncion_implicacion thm
+R997:1007 TAREA2.Props_LC <> Doble_Negac thm
+R997:1007 TAREA2.Props_LC <> Doble_Negac thm
+R997:1007 TAREA2.Props_LC <> Doble_Negac thm
+prf 1037:1051 <> DeMorgan_and_or
+binder 1063:1063 <> A:11
+binder 1065:1065 <> B:12
+R1076:1076 Coq.Init.Logic <> ::type_scope:x_'<->'_x not
+R1083:1088 Coq.Init.Logic <> ::type_scope:x_'<->'_x not
+R1078:1081 Coq.Init.Logic <> ::type_scope:x_'/\'_x not
+R1077:1077 TAREA2.Props_LC <> A:11 var
+R1082:1082 TAREA2.Props_LC <> B:12 var
+R1089:1091 Coq.Init.Logic <> ::type_scope:'~'_x not
+R1100:1100 Coq.Init.Logic <> ::type_scope:'~'_x not
+R1094:1097 Coq.Init.Logic <> ::type_scope:x_'\/'_x not
+R1092:1092 Coq.Init.Logic <> ::type_scope:'~'_x not
+R1093:1093 TAREA2.Props_LC <> A:11 var
+R1098:1098 Coq.Init.Logic <> ::type_scope:'~'_x not
+R1099:1099 TAREA2.Props_LC <> B:12 var
+R1141:1150 Coq.Logic.Classical_Prop <> and_not_or thm
+R1141:1150 Coq.Logic.Classical_Prop <> and_not_or thm
+R1173:1183 TAREA2.Props_LC <> Doble_Negac thm
+R1173:1183 TAREA2.Props_LC <> Doble_Negac thm
+R1173:1183 TAREA2.Props_LC <> Doble_Negac thm
+R1173:1183 TAREA2.Props_LC <> Doble_Negac thm
+R1173:1183 TAREA2.Props_LC <> Doble_Negac thm
+R1223:1232 Coq.Logic.Classical_Prop <> not_or_and thm
+R1223:1232 Coq.Logic.Classical_Prop <> not_or_and thm
+R1260:1270 TAREA2.Props_LC <> Doble_Negac thm
+R1260:1270 TAREA2.Props_LC <> Doble_Negac thm
+R1260:1270 TAREA2.Props_LC <> Doble_Negac thm
+R1260:1270 TAREA2.Props_LC <> Doble_Negac thm
+R1260:1270 TAREA2.Props_LC <> Doble_Negac thm
+prf 1312:1326 <> Cotenable_Conmt
+binder 1338:1338 <> A:13
+binder 1340:1340 <> B:14
+R1356:1360 Coq.Init.Logic <> ::type_scope:x_'<->'_x not
+R1351:1354 TAREA2.Def_LC <> :::x_'°'_x not
+R1350:1350 TAREA2.Props_LC <> A:13 var
+R1355:1355 TAREA2.Props_LC <> B:14 var
+R1362:1365 TAREA2.Def_LC <> :::x_'°'_x not
+R1361:1361 TAREA2.Props_LC <> B:14 var
+R1366:1366 TAREA2.Props_LC <> A:13 var
+R1385:1393 TAREA2.Def_LC <> cotenable def
+R1424:1445 TAREA2.Props_LC <> Disyuncion_implicacion thm
+R1424:1445 TAREA2.Props_LC <> Disyuncion_implicacion thm
+R1424:1445 TAREA2.Props_LC <> Disyuncion_implicacion thm
+R1424:1445 TAREA2.Props_LC <> Disyuncion_implicacion thm
+R1424:1445 TAREA2.Props_LC <> Disyuncion_implicacion thm
+R1462:1468 Coq.Init.Logic <> or_comm thm
+R1476:1476 Coq.Init.Logic <> ::type_scope:'~'_x not
+R1471:1471 Coq.Init.Logic <> ::type_scope:'~'_x not
+R1462:1468 Coq.Init.Logic <> or_comm thm
+R1476:1476 Coq.Init.Logic <> ::type_scope:'~'_x not
+R1471:1471 Coq.Init.Logic <> ::type_scope:'~'_x not
+R1462:1468 Coq.Init.Logic <> or_comm thm
+R1476:1476 Coq.Init.Logic <> ::type_scope:'~'_x not
+R1471:1471 Coq.Init.Logic <> ::type_scope:'~'_x not
+prf 1509:1522 <> Cotenable_Asoc
+binder 1534:1534 <> A:15
+binder 1536:1536 <> B:16
+binder 1538:1538 <> C:17
+R1562:1566 Coq.Init.Logic <> ::type_scope:x_'<->'_x not
+R1549:1549 TAREA2.Def_LC <> :::x_'°'_x not
+R1556:1560 TAREA2.Def_LC <> :::x_'°'_x not
+R1551:1554 TAREA2.Def_LC <> :::x_'°'_x not
+R1550:1550 TAREA2.Props_LC <> A:15 var
+R1555:1555 TAREA2.Props_LC <> B:16 var
+R1561:1561 TAREA2.Props_LC <> C:17 var
+R1568:1572 TAREA2.Def_LC <> :::x_'°'_x not
+R1579:1579 TAREA2.Def_LC <> :::x_'°'_x not
+R1567:1567 TAREA2.Props_LC <> A:15 var
+R1574:1577 TAREA2.Def_LC <> :::x_'°'_x not
+R1573:1573 TAREA2.Props_LC <> B:16 var
+R1578:1578 TAREA2.Props_LC <> C:17 var
+R1598:1606 TAREA2.Def_LC <> cotenable def
+R1637:1658 TAREA2.Props_LC <> Disyuncion_implicacion thm
+R1637:1658 TAREA2.Props_LC <> Disyuncion_implicacion thm
+R1637:1658 TAREA2.Props_LC <> Disyuncion_implicacion thm
+R1637:1658 TAREA2.Props_LC <> Disyuncion_implicacion thm
+R1637:1658 TAREA2.Props_LC <> Disyuncion_implicacion thm
+R1637:1658 TAREA2.Props_LC <> Disyuncion_implicacion thm
+R1637:1658 TAREA2.Props_LC <> Disyuncion_implicacion thm
+R1637:1658 TAREA2.Props_LC <> Disyuncion_implicacion thm
+R1637:1658 TAREA2.Props_LC <> Disyuncion_implicacion thm
+R1679:1689 TAREA2.Props_LC <> Doble_Negac thm
+R1679:1689 TAREA2.Props_LC <> Doble_Negac thm
+R1679:1689 TAREA2.Props_LC <> Doble_Negac thm
+R1679:1689 TAREA2.Props_LC <> Doble_Negac thm
+R1679:1689 TAREA2.Props_LC <> Doble_Negac thm
+R1706:1713 Coq.Init.Logic <> or_assoc thm
+R1721:1721 Coq.Init.Logic <> ::type_scope:'~'_x not
+R1716:1716 Coq.Init.Logic <> ::type_scope:'~'_x not
+R1706:1713 Coq.Init.Logic <> or_assoc thm
+R1721:1721 Coq.Init.Logic <> ::type_scope:'~'_x not
+R1716:1716 Coq.Init.Logic <> ::type_scope:'~'_x not
+R1706:1713 Coq.Init.Logic <> or_assoc thm
+R1721:1721 Coq.Init.Logic <> ::type_scope:'~'_x not
+R1716:1716 Coq.Init.Logic <> ::type_scope:'~'_x not
+prf 1754:1770 <> Cotenable_Dist_or
+binder 1782:1782 <> A:18
+binder 1784:1784 <> B:19
+binder 1786:1786 <> C:20
+R1796:1797 Coq.Init.Logic <> ::type_scope:x_'<->'_x not
+R1818:1826 Coq.Init.Logic <> ::type_scope:x_'<->'_x not
+R1840:1841 Coq.Init.Logic <> ::type_scope:x_'<->'_x not
+R1798:1798 Coq.Init.Logic <> ::type_scope:x_'\/'_x not
+R1805:1810 Coq.Init.Logic <> ::type_scope:x_'\/'_x not
+R1817:1817 Coq.Init.Logic <> ::type_scope:x_'\/'_x not
+R1800:1803 TAREA2.Def_LC <> :::x_'°'_x not
+R1799:1799 TAREA2.Props_LC <> A:18 var
+R1804:1804 TAREA2.Props_LC <> B:19 var
+R1812:1815 TAREA2.Def_LC <> :::x_'°'_x not
+R1811:1811 TAREA2.Props_LC <> A:18 var
+R1816:1816 TAREA2.Props_LC <> C:20 var
+R1828:1832 TAREA2.Def_LC <> :::x_'°'_x not
+R1839:1839 TAREA2.Def_LC <> :::x_'°'_x not
+R1827:1827 TAREA2.Props_LC <> A:18 var
+R1834:1837 Coq.Init.Logic <> ::type_scope:x_'\/'_x not
+R1833:1833 TAREA2.Props_LC <> B:19 var
+R1838:1838 TAREA2.Props_LC <> C:20 var
+R1860:1868 TAREA2.Def_LC <> cotenable def
+R1899:1920 TAREA2.Props_LC <> Disyuncion_implicacion thm
+R1899:1920 TAREA2.Props_LC <> Disyuncion_implicacion thm
+R1899:1920 TAREA2.Props_LC <> Disyuncion_implicacion thm
+R1899:1920 TAREA2.Props_LC <> Disyuncion_implicacion thm
+R1899:1920 TAREA2.Props_LC <> Disyuncion_implicacion thm
+R1899:1920 TAREA2.Props_LC <> Disyuncion_implicacion thm
+R1899:1920 TAREA2.Props_LC <> Disyuncion_implicacion thm
+R1941:1955 TAREA2.Props_LC <> DeMorgan_and_or thm
+R1941:1955 TAREA2.Props_LC <> DeMorgan_and_or thm
+R1941:1955 TAREA2.Props_LC <> DeMorgan_and_or thm
+R1941:1955 TAREA2.Props_LC <> DeMorgan_and_or thm
+R1941:1955 TAREA2.Props_LC <> DeMorgan_and_or thm
+R1941:1955 TAREA2.Props_LC <> DeMorgan_and_or thm
+R1941:1955 TAREA2.Props_LC <> DeMorgan_and_or thm
+prf 1985:2000 <> Cotenable_Fusion
+binder 2012:2012 <> A:21
+binder 2014:2014 <> B:22
+binder 2016:2016 <> C:23
+R2027:2027 Coq.Init.Logic <> ::type_scope:x_'<->'_x not
+R2039:2045 Coq.Init.Logic <> ::type_scope:x_'<->'_x not
+R2059:2059 Coq.Init.Logic <> ::type_scope:x_'<->'_x not
+R2029:2032 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R2034:2037 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R2038:2038 TAREA2.Props_LC <> C:23 var
+R2033:2033 TAREA2.Props_LC <> B:22 var
+R2028:2028 TAREA2.Props_LC <> A:21 var
+R2046:2046 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R2053:2057 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R2058:2058 TAREA2.Props_LC <> C:23 var
+R2048:2051 TAREA2.Def_LC <> :::x_'°'_x not
+R2047:2047 TAREA2.Props_LC <> A:21 var
+R2052:2052 TAREA2.Props_LC <> B:22 var
+R2078:2086 TAREA2.Def_LC <> cotenable def
+R2117:2138 TAREA2.Props_LC <> Disyuncion_implicacion thm
+R2117:2138 TAREA2.Props_LC <> Disyuncion_implicacion thm
+R2117:2138 TAREA2.Props_LC <> Disyuncion_implicacion thm
+R2117:2138 TAREA2.Props_LC <> Disyuncion_implicacion thm
+R2117:2138 TAREA2.Props_LC <> Disyuncion_implicacion thm
+R2117:2138 TAREA2.Props_LC <> Disyuncion_implicacion thm
+R2117:2138 TAREA2.Props_LC <> Disyuncion_implicacion thm
+R2117:2138 TAREA2.Props_LC <> Disyuncion_implicacion thm
+R2117:2138 TAREA2.Props_LC <> Disyuncion_implicacion thm
+R2154:2164 TAREA2.Props_LC <> Doble_Negac thm
+R2154:2164 TAREA2.Props_LC <> Doble_Negac thm
+R2154:2164 TAREA2.Props_LC <> Doble_Negac thm
+prf 2194:2214 <> Cotenable_Implicacion
+binder 2226:2226 <> A:24
+binder 2228:2228 <> B:25
+R2239:2239 Coq.Init.Logic <> ::type_scope:x_'<->'_x not
+R2246:2253 Coq.Init.Logic <> ::type_scope:x_'<->'_x not
+R2269:2270 Coq.Init.Logic <> ::type_scope:x_'<->'_x not
+R2241:2244 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R2245:2245 TAREA2.Props_LC <> B:25 var
+R2240:2240 TAREA2.Props_LC <> A:24 var
+R2254:2257 Coq.Init.Logic <> ::type_scope:'~'_x not
+R2267:2268 Coq.Init.Logic <> ::type_scope:'~'_x not
+R2259:2263 TAREA2.Def_LC <> :::x_'°'_x not
+R2266:2266 TAREA2.Def_LC <> :::x_'°'_x not
+R2258:2258 TAREA2.Props_LC <> A:24 var
+R2264:2264 Coq.Init.Logic <> ::type_scope:'~'_x not
+R2265:2265 TAREA2.Props_LC <> B:25 var
+R2289:2297 TAREA2.Def_LC <> cotenable def
+R2328:2338 TAREA2.Props_LC <> Doble_Negac thm
+R2328:2338 TAREA2.Props_LC <> Doble_Negac thm
+R2328:2338 TAREA2.Props_LC <> Doble_Negac thm
+R2328:2338 TAREA2.Props_LC <> Doble_Negac thm
+R2328:2338 TAREA2.Props_LC <> Doble_Negac thm
+prf 2368:2377 <> Argumento1
+R2401:2404 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+binder 2389:2389 <> A:26
+binder 2391:2391 <> B:27
+binder 2393:2393 <> C:28
+R2412:2413 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R2505:2511 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R2512:2513 Coq.Init.Logic <> ::type_scope:'~'_x not
+R2534:2535 Coq.Init.Logic <> ::type_scope:'~'_x not
+binder 2521:2521 <> x:29
+R2531:2531 TAREA2.Props_LC <> A:26 var
+R2533:2533 TAREA2.Props_LC <> x:29 var
+R2414:2415 Coq.Init.Logic <> ::type_scope:x_'/\'_x not
+R2484:2489 Coq.Init.Logic <> ::type_scope:x_'/\'_x not
+R2416:2416 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R2448:2452 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+binder 2460:2460 <> x:30
+R2470:2470 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R2474:2479 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R2483:2483 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R2480:2480 TAREA2.Props_LC <> C:28 var
+R2482:2482 TAREA2.Props_LC <> x:30 var
+R2471:2471 TAREA2.Props_LC <> B:27 var
+R2473:2473 TAREA2.Props_LC <> x:30 var
+R2417:2423 Coq.Init.Logic <> ::type_scope:'exists'_x_'..'_x_','_x not
+R2432:2433 Coq.Init.Logic <> ::type_scope:'exists'_x_'..'_x_','_x not
+binder 2424:2424 <> x:31
+R2434:2434 Coq.Init.Logic <> ::type_scope:x_'/\'_x not
+R2438:2443 Coq.Init.Logic <> ::type_scope:x_'/\'_x not
+R2447:2447 Coq.Init.Logic <> ::type_scope:x_'/\'_x not
+R2435:2435 TAREA2.Props_LC <> A:26 var
+R2437:2437 TAREA2.Props_LC <> x:31 var
+R2444:2444 TAREA2.Props_LC <> B:27 var
+R2446:2446 TAREA2.Props_LC <> x:31 var
+R2490:2490 Coq.Init.Logic <> ::type_scope:x_'/\'_x not
+R2494:2498 Coq.Init.Logic <> ::type_scope:x_'/\'_x not
+R2491:2491 TAREA2.Props_LC <> B:27 var
+R2493:2493 TAREA2.Props_LC <> a defax
+R2499:2500 Coq.Init.Logic <> ::type_scope:'~'_x not
+R2504:2504 Coq.Init.Logic <> ::type_scope:'~'_x not
+R2501:2501 TAREA2.Props_LC <> C:28 var
+R2503:2503 TAREA2.Props_LC <> a defax
+R2593:2606 Coq.Logic.Classical_Pred_Type <> ex_not_not_all thm
+R2593:2606 Coq.Logic.Classical_Pred_Type <> ex_not_not_all thm
+R2622:2628 Coq.Logic.Classical_Prop <> classic prfax
+R2633:2633 TAREA2.Props_LC <> a defax
+R2622:2628 Coq.Logic.Classical_Prop <> classic prfax
+R2633:2633 TAREA2.Props_LC <> a defax
+binder 2685:2685 <> x:32
+R2698:2701 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R2704:2704 TAREA2.Props_LC <> x:32 var
+R2697:2697 TAREA2.Props_LC <> x:32 var
+binder 2685:2685 <> x:33
+R2698:2701 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R2704:2704 TAREA2.Props_LC <> x:33 var
+R2697:2697 TAREA2.Props_LC <> x:33 var
+R2738:2738 TAREA2.Props_LC <> a defax
+R2738:2738 TAREA2.Props_LC <> a defax
+R2775:2775 TAREA2.Props_LC <> a defax
+R2775:2775 TAREA2.Props_LC <> a defax
+R2834:2834 TAREA2.Props_LC <> a defax
+R2834:2834 TAREA2.Props_LC <> a defax
+prf 2872:2881 <> Argumento2
+R2904:2907 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R2912:2915 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+binder 2894:2894 <> B:34
+binder 2896:2896 <> G:35
+R2934:2937 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+binder 2924:2924 <> C:36
+binder 2926:2926 <> W:37
+R2945:2945 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R3016:3022 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R3023:3024 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R3092:3099 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R3133:3134 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+binder 3107:3107 <> x:38
+R3117:3117 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R3121:3125 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R3126:3128 Coq.Init.Logic <> ::type_scope:'~'_x not
+R3132:3132 Coq.Init.Logic <> ::type_scope:'~'_x not
+R3129:3129 TAREA2.Props_LC <> W:37 var
+R3131:3131 TAREA2.Props_LC <> x:38 var
+R3118:3118 TAREA2.Props_LC <> C:36 var
+R3120:3120 TAREA2.Props_LC <> x:38 var
+binder 3032:3032 <> z:39
+R3081:3085 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R3091:3091 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R3086:3086 TAREA2.Props_LC <> B:34 var
+R3090:3090 TAREA2.Props_LC <> m defax
+R3088:3088 TAREA2.Props_LC <> z:39 var
+R3042:3044 Coq.Init.Logic <> ::type_scope:'~'_x not
+R3080:3080 Coq.Init.Logic <> ::type_scope:'~'_x not
+binder 3052:3052 <> y:40
+R3062:3062 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R3066:3072 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R3078:3079 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R3073:3073 TAREA2.Props_LC <> G:35 var
+R3077:3077 TAREA2.Props_LC <> y:40 var
+R3075:3075 TAREA2.Props_LC <> z:39 var
+R3063:3063 TAREA2.Props_LC <> W:37 var
+R3065:3065 TAREA2.Props_LC <> y:40 var
+R2946:2952 Coq.Init.Logic <> ::type_scope:'exists'_x_'..'_x_','_x not
+R2961:2963 Coq.Init.Logic <> ::type_scope:'exists'_x_'..'_x_','_x not
+binder 2953:2953 <> x:41
+R2974:2978 Coq.Init.Logic <> ::type_scope:x_'/\'_x not
+R3015:3015 Coq.Init.Logic <> ::type_scope:x_'/\'_x not
+R2964:2966 Coq.Init.Logic <> ::type_scope:'~'_x not
+R2972:2973 Coq.Init.Logic <> ::type_scope:'~'_x not
+R2967:2967 TAREA2.Props_LC <> B:34 var
+R2971:2971 TAREA2.Props_LC <> m defax
+R2969:2969 TAREA2.Props_LC <> x:41 var
+binder 2986:2986 <> y:42
+R2996:2996 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R3000:3004 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R3005:3007 Coq.Init.Logic <> ::type_scope:'~'_x not
+R3013:3014 Coq.Init.Logic <> ::type_scope:'~'_x not
+R3008:3008 TAREA2.Props_LC <> G:35 var
+R3012:3012 TAREA2.Props_LC <> y:42 var
+R3010:3010 TAREA2.Props_LC <> x:41 var
+R2997:2997 TAREA2.Props_LC <> C:36 var
+R2999:2999 TAREA2.Props_LC <> y:42 var
+R3259:3269 TAREA2.Props_LC <> Doble_Negac thm
+R3277:3277 TAREA2.Props_LC <> m defax
+R3259:3269 TAREA2.Props_LC <> Doble_Negac thm
+R3277:3277 TAREA2.Props_LC <> m defax
+R3259:3269 TAREA2.Props_LC <> Doble_Negac thm
+R3277:3277 TAREA2.Props_LC <> m defax
+R3301:3314 TAREA2.Props_LC <> Contrapositiva thm
+R3301:3314 TAREA2.Props_LC <> Contrapositiva thm
+R3301:3314 TAREA2.Props_LC <> Contrapositiva thm
+R3445:3458 TAREA2.Props_LC <> Contrapositiva thm
+R3445:3458 TAREA2.Props_LC <> Contrapositiva thm
+R3445:3458 TAREA2.Props_LC <> Contrapositiva thm
+prf 3505:3528 <> DeMorgan_Cuantificadores
+R3550:3553 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+binder 3540:3540 <> P:43
+binder 3542:3542 <> Q:44
+R3596:3601 Coq.Init.Logic <> ::type_scope:x_'<->'_x not
+R3629:3629 Coq.Init.Logic <> ::type_scope:x_'<->'_x not
+R3561:3563 Coq.Init.Logic <> ::type_scope:'~'_x not
+R3595:3595 Coq.Init.Logic <> ::type_scope:'~'_x not
+binder 3571:3571 <> x:45
+R3586:3589 Coq.Init.Logic <> ::type_scope:x_'\/'_x not
+R3581:3582 Coq.Init.Logic <> ::type_scope:'~'_x not
+R3583:3583 TAREA2.Props_LC <> P:43 var
+R3585:3585 TAREA2.Props_LC <> x:45 var
+R3590:3591 Coq.Init.Logic <> ::type_scope:'~'_x not
+R3592:3592 TAREA2.Props_LC <> Q:44 var
+R3594:3594 TAREA2.Props_LC <> x:45 var
+R3602:3608 Coq.Init.Logic <> ::type_scope:'exists'_x_'..'_x_','_x not
+R3617:3618 Coq.Init.Logic <> ::type_scope:'exists'_x_'..'_x_','_x not
+binder 3609:3609 <> x:46
+R3622:3625 Coq.Init.Logic <> ::type_scope:x_'/\'_x not
+R3619:3619 TAREA2.Props_LC <> P:43 var
+R3621:3621 TAREA2.Props_LC <> x:46 var
+R3626:3626 TAREA2.Props_LC <> Q:44 var
+R3628:3628 TAREA2.Props_LC <> x:46 var
+R3670:3683 Coq.Logic.Classical_Pred_Type <> not_all_ex_not thm
+R3670:3683 Coq.Logic.Classical_Pred_Type <> not_all_ex_not thm
+R3722:3736 TAREA2.Props_LC <> DeMorgan_and_or thm
+R3722:3736 TAREA2.Props_LC <> DeMorgan_and_or thm
+R3722:3736 TAREA2.Props_LC <> DeMorgan_and_or thm
+R3817:3830 Coq.Logic.Classical_Pred_Type <> ex_not_not_all thm
+R3817:3830 Coq.Logic.Classical_Pred_Type <> ex_not_not_all thm
+R3862:3876 TAREA2.Props_LC <> DeMorgan_and_or thm
+R3862:3876 TAREA2.Props_LC <> DeMorgan_and_or thm
+R3862:3876 TAREA2.Props_LC <> DeMorgan_and_or thm
+prf 3914:3923 <> Argumento3
+R3952:3955 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+binder 3936:3936 <> P:47
+binder 3938:3938 <> H:48
+binder 3940:3940 <> C:49
+binder 3942:3942 <> L:50
+binder 3944:3944 <> R:51
+R3972:3975 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R3980:3983 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+binder 3962:3962 <> A:52
+binder 3964:3964 <> B:53
+R3991:3992 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R4099:4105 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R4106:4107 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R4223:4231 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R4297:4298 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R4260:4263 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+binder 4271:4271 <> x:54
+R4287:4290 Coq.Init.Logic <> ::type_scope:x_'\/'_x not
+R4281:4282 Coq.Init.Logic <> ::type_scope:'~'_x not
+R4286:4286 Coq.Init.Logic <> ::type_scope:'~'_x not
+R4283:4283 TAREA2.Props_LC <> P:47 var
+R4285:4285 TAREA2.Props_LC <> x:54 var
+R4291:4292 Coq.Init.Logic <> ::type_scope:'~'_x not
+R4296:4296 Coq.Init.Logic <> ::type_scope:'~'_x not
+R4293:4293 TAREA2.Props_LC <> H:48 var
+R4295:4295 TAREA2.Props_LC <> x:54 var
+R4232:4233 Coq.Init.Logic <> ::type_scope:'~'_x not
+R4258:4259 Coq.Init.Logic <> ::type_scope:'~'_x not
+binder 4241:4241 <> x:55
+binder 4243:4243 <> y:56
+R4253:4253 TAREA2.Props_LC <> B:53 var
+R4257:4257 TAREA2.Props_LC <> y:56 var
+R4255:4255 TAREA2.Props_LC <> x:55 var
+R4108:4108 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R4168:4173 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R4222:4222 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+binder 4181:4181 <> x:57
+R4191:4191 Coq.Init.Logic <> ::type_scope:x_'/\'_x not
+R4195:4199 Coq.Init.Logic <> ::type_scope:x_'/\'_x not
+R4192:4192 TAREA2.Props_LC <> R:51 var
+R4194:4194 TAREA2.Props_LC <> x:57 var
+binder 4207:4207 <> y:58
+R4217:4217 TAREA2.Props_LC <> B:53 var
+R4221:4221 TAREA2.Props_LC <> y:58 var
+R4219:4219 TAREA2.Props_LC <> x:57 var
+R4109:4115 Coq.Init.Logic <> ::type_scope:'exists'_x_'..'_x_','_x not
+R4124:4125 Coq.Init.Logic <> ::type_scope:'exists'_x_'..'_x_','_x not
+binder 4116:4116 <> x:59
+R4126:4126 Coq.Init.Logic <> ::type_scope:x_'/\'_x not
+R4130:4134 Coq.Init.Logic <> ::type_scope:x_'/\'_x not
+R4127:4127 TAREA2.Props_LC <> H:48 var
+R4129:4129 TAREA2.Props_LC <> x:59 var
+binder 4142:4142 <> y:60
+R4152:4152 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R4156:4161 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R4167:4167 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R4162:4162 TAREA2.Props_LC <> A:52 var
+R4166:4166 TAREA2.Props_LC <> y:60 var
+R4164:4164 TAREA2.Props_LC <> x:59 var
+R4153:4153 TAREA2.Props_LC <> L:50 var
+R4155:4155 TAREA2.Props_LC <> y:60 var
+R4030:4034 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R4097:4098 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+binder 4042:4042 <> x:61
+R4052:4052 Coq.Init.Logic <> ::type_scope:x_'/\'_x not
+R4056:4061 Coq.Init.Logic <> ::type_scope:x_'/\'_x not
+R4095:4096 Coq.Init.Logic <> ::type_scope:x_'/\'_x not
+R4053:4053 TAREA2.Props_LC <> C:49 var
+R4055:4055 TAREA2.Props_LC <> x:61 var
+binder 4069:4069 <> y:62
+R4079:4079 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R4083:4088 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R4094:4094 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R4089:4089 TAREA2.Props_LC <> A:52 var
+R4093:4093 TAREA2.Props_LC <> y:62 var
+R4091:4091 TAREA2.Props_LC <> x:61 var
+R4080:4080 TAREA2.Props_LC <> L:50 var
+R4082:4082 TAREA2.Props_LC <> y:62 var
+R3993:3994 Coq.Init.Logic <> ::type_scope:'~'_x not
+R4028:4029 Coq.Init.Logic <> ::type_scope:'~'_x not
+binder 4002:4002 <> x:63
+R4018:4021 Coq.Init.Logic <> ::type_scope:x_'\/'_x not
+R4012:4013 Coq.Init.Logic <> ::type_scope:'~'_x not
+R4017:4017 Coq.Init.Logic <> ::type_scope:'~'_x not
+R4014:4014 TAREA2.Props_LC <> P:47 var
+R4016:4016 TAREA2.Props_LC <> x:63 var
+R4022:4023 Coq.Init.Logic <> ::type_scope:'~'_x not
+R4027:4027 Coq.Init.Logic <> ::type_scope:'~'_x not
+R4024:4024 TAREA2.Props_LC <> H:48 var
+R4026:4026 TAREA2.Props_LC <> x:63 var
+R4354:4360 Coq.Logic.Classical_Prop <> classic prfax
+binder 4370:4370 <> x:64
+R4385:4388 Coq.Init.Logic <> ::type_scope:x_'\/'_x not
+R4380:4381 Coq.Init.Logic <> ::type_scope:'~'_x not
+R4384:4384 TAREA2.Props_LC <> x:64 var
+R4389:4390 Coq.Init.Logic <> ::type_scope:'~'_x not
+R4393:4393 TAREA2.Props_LC <> x:64 var
+R4354:4360 Coq.Logic.Classical_Prop <> classic prfax
+binder 4370:4370 <> x:65
+R4385:4388 Coq.Init.Logic <> ::type_scope:x_'\/'_x not
+R4380:4381 Coq.Init.Logic <> ::type_scope:'~'_x not
+R4384:4384 TAREA2.Props_LC <> x:65 var
+R4389:4390 Coq.Init.Logic <> ::type_scope:'~'_x not
+R4393:4393 TAREA2.Props_LC <> x:65 var
+R4496:4519 TAREA2.Props_LC <> DeMorgan_Cuantificadores thm
+R4496:4519 TAREA2.Props_LC <> DeMorgan_Cuantificadores thm
+R4496:4519 TAREA2.Props_LC <> DeMorgan_Cuantificadores thm
+R4633:4639 Coq.Init.Logic <> ::type_scope:'exists'_x_'..'_x_','_x not
+R4648:4649 Coq.Init.Logic <> ::type_scope:'exists'_x_'..'_x_','_x not
+binder 4640:4640 <> x:66
+R4653:4657 Coq.Init.Logic <> ::type_scope:x_'/\'_x not
+R4687:4687 Coq.Init.Logic <> ::type_scope:x_'/\'_x not
+R4652:4652 TAREA2.Props_LC <> x:66 var
+binder 4665:4665 <> y:67
+R4678:4681 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R4686:4686 TAREA2.Props_LC <> y:67 var
+R4684:4684 TAREA2.Props_LC <> x:66 var
+R4677:4677 TAREA2.Props_LC <> y:67 var
+R4633:4639 Coq.Init.Logic <> ::type_scope:'exists'_x_'..'_x_','_x not
+R4648:4649 Coq.Init.Logic <> ::type_scope:'exists'_x_'..'_x_','_x not
+binder 4640:4640 <> x:68
+R4653:4657 Coq.Init.Logic <> ::type_scope:x_'/\'_x not
+R4687:4687 Coq.Init.Logic <> ::type_scope:x_'/\'_x not
+R4652:4652 TAREA2.Props_LC <> x:68 var
+binder 4665:4665 <> y:69
+R4678:4681 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R4686:4686 TAREA2.Props_LC <> y:69 var
+R4684:4684 TAREA2.Props_LC <> x:68 var
+R4677:4677 TAREA2.Props_LC <> y:69 var
+R4755:4768 Coq.Logic.Classical_Pred_Type <> not_all_ex_not thm
+R4755:4768 Coq.Logic.Classical_Pred_Type <> not_all_ex_not thm
+R4819:4832 Coq.Logic.Classical_Pred_Type <> not_all_ex_not thm
+R4819:4832 Coq.Logic.Classical_Pred_Type <> not_all_ex_not thm

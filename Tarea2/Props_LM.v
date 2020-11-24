@@ -6,6 +6,7 @@ Resultados de lógica minimal.
 *)
 
 (*
+Se puede reducir la triple negación a una negación
 *)
 Lemma Triple_Negacion_LM : 
 forall A : Prop, 
@@ -22,26 +23,24 @@ Proof.
 Qed.
 
 (*
+Comportamiento de la doble negación vs conjunción.
 *)
 Lemma Negacion_Conjuncion_LM : 
 forall A B : Prop, 
  ~ ~ (A /\ B ) -> ~ ~ A /\ ~ ~ B.
 Proof.
   unfold not.
-  split.
-  - intro. 
-    apply H. 
-    intro. 
-    destruct H1. 
-    contradiction.
-  - intro. 
-    apply H. 
-    intro. 
-    destruct H1. 
+  split;
+    intro;
+    apply H; 
+    intro; 
+    destruct H1; 
     contradiction.
 Qed.
 
 (*
+Doble negación vs cuantificador universal, 
+se puede introducir una doble negación en un cuantificador universal
 *)
 Lemma DobleNeg_CUniversal_LM : 
 forall A : Type -> Prop, 
@@ -51,9 +50,6 @@ Proof.
   intros.
   apply H.
   intro.
-  specialize (H1 x).
+  assert (H2 := H1 x).
   contradiction.
 Qed.
-
-
-
