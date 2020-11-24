@@ -4,12 +4,9 @@
 
 El objetivo en la presente tarea es estudiar los niveles de negación (minimal, intuicionista y clásica) con la que trabaja Coq. 
 
-Se estudia el operador binario de cotenabilidad, definido por 
+Se estudia el operador binario de cotenabilidad, definido por <img src="https://render.githubusercontent.com/render/math?math=A \circ B := \neg (A \to \neg B)">. La prueba de algunas propiedades de este operador como conmuntatividad, asociatividad, distributividad y fusión (<img src="https://render.githubusercontent.com/render/math?math=A \circ B \to C \leftrightarrow (A \to B \to C)">; requieren de manejar la negación. Para ello se usan propiedades clásicas bien conocidas como la eliminación de la doble negación y las leyes de De Morgan. 
 
-<img src="https://render.githubusercontent.com/render/math?math=A \circ B := \neg (A \to \neg B)">
-
-
-
+Por otro lado, se realiza un estudio del cálculo de predicados.
 
 
 Los archivos son los siguientes: 
