@@ -6,7 +6,7 @@ El objetivo en la presente tarea es estudiar los niveles de negación (minimal, 
 
 Se estudia el operador binario de cotenabilidad, definido por 
 
-<img src="https://render.githubusercontent.com/render/math?math=A ° B := ¬ (A -> ¬ B)">
+<img src="https://render.githubusercontent.com/render/math?math=A \circ B := \neg (A \to \neg B)">
 
 
 
