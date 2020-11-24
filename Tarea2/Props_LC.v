@@ -7,7 +7,7 @@ Resultados de lógica clásica.
 Se importa el módulo de lógica clásica de Coq y el archivo de definiciones para lógica clásica
 *)
 Require Import Coq.Logic.Classical.
-From TAREA2 Require Import Def_LC.
+From TAREA2 Require Import Defs_LC.
 (*
 Constantes que aparecen en las afirmaciones.
 *)
