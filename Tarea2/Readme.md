@@ -4,17 +4,16 @@
 
 El objetivo en la presente tarea es estudiar los niveles de negación (minimal, intuicionista y clásica) con la que trabaja Coq. 
 
-Se estudia el operador binario de cotenabilidad, definido por <img src="https://render.githubusercontent.com/render/math?math=A \circ B := \neg (A \to \neg B)">. La prueba de algunas propiedades de este operador como conmuntatividad, asociatividad, distributividad y fusión (<img src="https://render.githubusercontent.com/render/math?math=A \circ B \to C \leftrightarrow (A \to B \to C)">; requieren de manejar la negación. Para ello se usan propiedades clásicas bien conocidas como la eliminación de la doble negación y las leyes de De Morgan. 
+Se verifican algunas propiedades del operador binario de cotenabilidad, <img src="https://render.githubusercontent.com/render/math?math=A \circ B := \neg (A \to \neg B)">, tales como conmuntatividad, asociatividad, distributividad y fusión (<img src="https://render.githubusercontent.com/render/math?math=A \circ B \to C \leftrightarrow (A \to B \to C)">). La verificación requiere de requieren de trabajo con la negación. Para ello se usan propiedades clásicas bien conocidas como la eliminación de la doble negación y las leyes de De Morgan. 
 
-Por otro lado, se realiza un estudio del cálculo de predicados.
-
+También se verifican algunos argumentos dando uso de cualquiera de los tres sistemas.
 
 Los archivos son los siguientes: 
-- Props_LM.v : proposiciones demostradas con lógica minimal. 
-- Props_LI.v : proposiciones demostradas con lógica intuicionista. 
+- Props_LM.v : proposiciones verificadas con lógica minimal. 
+- Props_LI.v : proposiciones verificadas con lógica intuicionista. 
 - Defs_LC.v : definiciones y notación para el operador cotenable.
-- Props_LC.v : proposiciones demostradas con lógica clásica.
-- Examples.v : proposiciones probadas con alguno de los tres sistemas. 
+- Props_LC.v : proposiciones verificadas con lógica clásica.
+- Examples.v : proposiciones verificadas con alguno de los tres sistemas. 
 
 Y las dependencias son las siguientes: 
 
