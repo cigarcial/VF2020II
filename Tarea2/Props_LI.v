@@ -27,7 +27,7 @@ Proof.
       intro;
       apply H0;
       intro;
-      (*Se generan dos metas, en la primera hay una contradicci
+      (*Se generan dos metas, en la primera hay una contradicción
       y en la segunda es una hipotesis*)
       contradiction || assumption.
 Qed.

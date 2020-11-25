@@ -2,6 +2,6 @@
 # Unam 2020-II
 ## Ciro Iván García López - Cta: 520463240
 
-- [Tarea 2:](https://github.com/cigarcial/VF2020II/tree/master/Tarea2) En esta tarea se exploran los niveles de negación en Coq (minimal, intuicionista y clásica). Se prueban algunas afirmaciones y se sobre proposiciones y predicados. 
+- [Tarea 2:](https://github.com/cigarcial/VF2020II/tree/master/Tarea2) En esta tarea se exploran los niveles de negación en Coq (minimal, intuicionista y clásica). Se verifican algunos argumentos, proposiciones y predicados. 
 
 
