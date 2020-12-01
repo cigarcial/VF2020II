@@ -40,55 +40,9 @@ match T with
 end.
 
 Notation "A '^⊥'" := (Dual_ULLT A)(at level 50, left associativity).
-
-
-Proposition Doble_Duality_ULLT  : 
-forall A : ULLType , 
-(A^⊥)^⊥ = A. 
-Proof.
-  intros.
-  induction A; auto. 
-  - simpl. rewrite -> IHA1. rewrite -> IHA2. reflexivity.
-  - simpl. rewrite -> IHA1. rewrite -> IHA2. reflexivity.
-  - simpl. rewrite -> IHA. reflexivity. 
-  - simpl. rewrite -> IHA. reflexivity. 
-Qed.
-
-
 Definition ULLT_IMP (A : ULLType) (B : ULLType) : ULLType := (A^⊥) ⅋ B.
+
 Notation "A −∘ B" := (ULLT_IMP A B)(at level 50, left associativity).
-
-Proposition Dual_Implication_Tensor : 
-forall A B : ULLType , 
-(A −∘ B)^⊥ = A ⊗ (B^⊥).
-Proof.
-  intros.
-  unfold ULLT_IMP.
-  simpl.
-  rewrite -> (Doble_Duality_ULLT A).
-  reflexivity.
-Qed.
-
-Proposition Dual_Tensor_Implication :  
-forall A B : ULLType, 
-(A ⊗ B )^⊥ = A −∘ (B^⊥).
-Proof.
-  intros.
-  simpl.
-  unfold ULLT_IMP.
-  reflexivity.
-Qed.
-
-Proposition Doble_Dual_Implication : 
-forall A B : ULLType, 
-((A −∘ B)^⊥)^⊥ = A −∘ B.
-Proof.
-  intros.
-  unfold ULLT_IMP.
-  rewrite -> (Doble_Duality_ULLT).
-  reflexivity.
-Qed.
-
 
 
 
