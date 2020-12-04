@@ -4,7 +4,9 @@
   Proyecto 1. Session Type Systems Verification
 *)
 
+From Coq Require Import Strings.String.
 From PROYI Require Import  Defs_ProyI.
+
 
 Proposition Doble_Duality_ULLT  : 
 forall A : ULLType , 
@@ -48,6 +50,56 @@ Proof.
   rewrite -> (Doble_Duality_ULLT).
   reflexivity.
 Qed.
+
+
+(*
+En las definiciones se encuentran las equivalencias de la definición 2.4, sin embargo es necesario indicar que son 'coherentes'
+dichas equivalencias. Es decir, si partimos de un proceso obtenemos un proceso.
+*)
+
+Lemma Conmt_Fuses :
+forall x y : string,
+  Process([x ←→ y]) <-> Process([y ←→ x]).
+Proof. 
+  split.
+  - intros.
+    constructor.
+  - intros.
+    constructor.
+Qed.
+
+Lemma Equiv_Process_Zero : 
+forall P : PProcess, 
+Process (P ↓ °) <->  (Process P).
+Proof. 
+  split.
+  - intros.
+    inversion H.
+    assumption.
+  - intros.
+    constructor.
+    + assumption.
+    + constructor.
+Qed.
+
+
+(*
+Para la definición 2.5 bajo la mirada de NLR es necesario probar que de procesos se obtienen procesos
+*)
+
+Theorem ProcessReduction_WD : 
+forall P Q : PProcess, 
+(P --> Q) -> Process(P)  -> Process(Q).
+Proof.
+  intros.
+  induction H.
+  - inversion H0. 
+    constructor.
+    + inversion H2.
+      assumption.
+    + inversion H3.
+      destruct H5.
+  
 
 
 
