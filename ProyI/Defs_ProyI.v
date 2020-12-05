@@ -49,67 +49,81 @@ Notation "A −∘ B" := (ULLT_IMP A B)(at level 70, right associativity).
 
 
 (*
-Tercera aproximación a la mecanización de los procesos, se procede usando la idea de locally named representation
+
+Cuarta aproximación a la mecanización de los procesos, se procede usando la idea de locally named representation
 Se introducen FVAR y BVAR para denotar variables libres y ligadas 
+
+Esta vez se utilizan las ideas del artículo de Castro Engineering The Meta-Theory of Session Types
 
 Siguiendo las ideas de LNR se debe definir una nueva gramática que haga la distinción entre las variables libres y ligadas
 *)
- 
-Inductive PProcess : Type  := 
-  (*Definición de variables libres y ligadas*)
-  | P_FVAR ( x : string) : PProcess
-  | P_BVAR ( i : nat ) : PProcess 
-  (* Ahora vienen los procesos bajo la nueva gramática *)
-  | P_ZERO : PProcess 
-  | P_FUSES ( P Q : PProcess ) : PProcess
-  | P_PARALLEL_COMP ( P Q : PProcess ) : PProcess
-  | P_CHAN_OUTPUT (P Q R : PProcess) : PProcess 
-  | P_CHAN_ZERO ( P : PProcess ) : PProcess
-  | P_CHAN_CLOSE ( P Q : PProcess) : PProcess 
-  (*Cambian las definiciones para incluir las variables *)
-  | P_CHAN_RES ( P : PProcess ) : PProcess
-  | P_CHAN_INPUT (P Q: PProcess) : PProcess
-  | P_CHAN_REPLICATE (P Q : PProcess) : PProcess.
 
+Inductive Name : Type := 
+  | FName ( x : string) : Name
+  | BName ( i : nat) : Name.
+
+
+Inductive Prepro : Type  := 
+  (* Ahora vienen los procesos bajo las nuevas ideas *)
+  | Prezero : Prepro 
+  | Prefuse (x y : Name) : Prepro
+  | Preparallel (P Q : Prepro ) : Prepro
+  | Preoutput ( x y : Name ) (P : Prepro) : Prepro
+  | Prechan_zero (x : Name ) : Prepro
+  | Prechan_close ( x : Name ) ( P : Prepro ) : Prepro
+  (* preprocesos con variables ligadas *)
+  | Prechan_res (P : Prepro ) : Prepro
+  | Prechan_input ( x : Name ) (P : Prepro) : Prepro
+  | Prechan_replicate ( x : Name)(P : Prepro ) : Prepro.
 
 (*
-Desde la notación se pone el primer filtro para que los términos tengan el sentido deseado
+
+Observe que la nueva idea es más sencilla, se tienen menos términos no deseados.
+
+La notación cambia bastante, no se fija el tipo de nombre por defecto
 
 Faltan las asociatividades y las prioridades 
 *)
-Notation "°" :=  P_ZERO.
-Notation "[ x ←→ y ]" := ( P_FUSES (P_FVAR x) (P_FVAR y) ) (at level 50, left associativity).
-(*Cambio la notación, no uso el | porque genera problemas en las definiciones Inductive *)
-Notation "P ↓ Q" := (P_PARALLEL_COMP P Q)  (at level 55, left associativity).
-Notation "x  « y »· P " :=  (P_CHAN_OUTPUT (P_FVAR x) (P_FVAR y) P )(at level 50, left associativity).
-Notation "x «»·° " := (P_CHAN_ZERO (P_FVAR x))(at level 50, left associativity).
-Notation "x ()· P" := (P_CHAN_CLOSE (P_FVAR x) P )(at level 50, left associativity).
-Notation " 'ν' P " := (P_CHAN_RES P)(at level 50, left associativity).
-Notation "x · P " := (P_CHAN_INPUT (P_FVAR x) P)(at level 50, left associativity).
-Notation " x !· P " := (P_CHAN_REPLICATE (P_FVAR x) P)(at level 50, left associativity).
+Notation "°" :=  Prezero.
+Notation "[ x ←→ y ]" := (Prefuse x y ) ( at level 60).
+(*Cambio la notación respecto al artículo, 
+no uso el | porque genera problemas en las definiciones Inductive *)
+Notation "P ↓ Q" :=  (Preparallel P Q ) ( at level 60).
+Notation "x  « y »· P " := (Preoutput x y P ) (at level 60).
+Notation "x «»·° " :=  (Prechan_zero x ) (at level 60).
+Notation "x ()· P" := (Prechan_close x P)(at level 60).
+(* procesos con ligadas*)
+Notation " 'ν' P " := (Prechan_res P ) ( at level 60).
+Notation "x · P " := (Prechan_input x P)(at level 60).
+Notation " x !· P " :=  (Prechan_replicate x P)(at level 60).
+
 
 (*
 Se necesitan las nociones de apertura y clausura de variables, por lo que se procede a definirlas apropiadamente. 
 
 Se usa la misma notación del artículo de Charguéraud
 
-Observe que es necesario definir la apertura para todos los terminos incluidos los basura 
+Se necesita ahora distinguir dos aperturas uno para preprocesos y otra para los nombres.
 *) 
-Fixpoint Open_Rec (k : nat)( z : string )( T : PProcess ) {struct T} : PProcess := 
+
+Definition Open_Name ( k : nat )(z: string)( N : Name ) : Name := 
+match N with 
+  | FName x => FName x
+  | BName i => if ( k =? i ) then (FName z) else (BName i)
+end.
+
+(* Ahora la apertura de preprocesos bajo la nueva gramática *)
+Fixpoint Open_Rec (k : nat)( z : string )( T : Prepro ) {struct T} : Prepro := 
 match T with
-  | P_FVAR x => P_FVAR x
-  | P_BVAR i => if ( k =? i ) then (P_FVAR z) else (P_BVAR i)
-  (* Ahora vienen los procesos bajo la nueva gramática *)
-  | P_ZERO => P_ZERO
-  | P_FUSES P Q => P_FUSES (Open_Rec k z P) (Open_Rec k z Q)
-  | P_PARALLEL_COMP P Q => P_PARALLEL_COMP (Open_Rec k z P) (Open_Rec k z Q)
-  | P_CHAN_OUTPUT P Q R => P_CHAN_OUTPUT (Open_Rec k z P) (Open_Rec k z Q) (Open_Rec k z R)
-  | P_CHAN_ZERO P => P_CHAN_ZERO (Open_Rec k z P)
-  | P_CHAN_CLOSE P Q => P_CHAN_CLOSE (Open_Rec k z P) (Open_Rec k z Q)
-  (*Cambian las definiciones para incluir las variables *)
-  | P_CHAN_RES P => P_CHAN_RES (Open_Rec (S k) z P)
-  | P_CHAN_INPUT P Q   => P_CHAN_INPUT (Open_Rec (S k) z P) (Open_Rec (S k) z Q ) 
-  | P_CHAN_REPLICATE P Q  => P_CHAN_REPLICATE (Open_Rec (S k) z P) (Open_Rec (S k) z Q)
+  | Prezero => Prezero
+  | Prefuse x y => Prefuse (Open_Name k z x ) (Open_Name k z y )
+  | Preparallel P Q => Preparallel (Open_Rec k z P) (Open_Rec k z Q)
+  | Preoutput x y P => Preoutput (Open_Name k z x) (Open_Name k z y) (Open_Rec k z P) 
+  | Prechan_zero x => Prechan_zero (Open_Name k z x)
+  | Prechan_close x P => Prechan_close (Open_Name k z x) (Open_Rec k z P)
+  | Prechan_res P => Prechan_res (Open_Rec (S k) z P)
+  | Prechan_input x P => Prechan_input (Open_Name k z x) (Open_Rec (S k) z P)
+  | Prechan_replicate x P => Prechan_replicate (Open_Name k z x) (Open_Rec (S k) z P)
 end.
 
 Notation "{ k ~> z } P " := (Open_Rec k z P)(at level 60).
@@ -123,20 +137,39 @@ Y como también menciona el artículo de LNR, con la nueva gramática se introdu
 que no hacian parte de la gramática original; por lo que se debe definir el predicado local closure 
 que básicamente es tomar los términos que si nos sirven y descartar lo demás.
 
-Se cambia un poco la perspectiva, se prefiere por el momento la definición usando un existencial y no el conjunto L y un universal 
+Hay que incluir el hecho que una FName es un nombre de proceso 
 *)
  
-Inductive Process : PProcess -> Prop :=
-  | ZERO : Process P_ZERO
-  | FVAR : forall (x : string), Process ( P_FVAR x)
-  | PARALLEL_COMP : forall (P Q : PProcess), Process(P) -> Process(Q)-> Process ( P_PARALLEL_COMP P Q )
-  | FUSES : forall (x y : string), Process (P_FUSES (P_FVAR x) (P_FVAR y))
-  | CHAN_ZERO : forall (x : string), Process ( P_CHAN_ZERO (P_FVAR x))
-  | CHAN_CLOSE : forall (x : string) (P : PProcess), Process(P) -> Process ( P_CHAN_CLOSE (P_FVAR x) P)
-  | CHAN_OUTPUT : forall (x y : string)(P : PProcess), (Process P) -> Process ( P_CHAN_OUTPUT (P_FVAR x) (P_FVAR y) P )
-  | CHAN_RES : forall ( P :PProcess), (exists (z : string), Process (P ^ z)) -> Process (P_CHAN_RES P)
-  | CHAN_INPUT : forall (x : string) ( P :PProcess), (exists (z : string), Process (P ^ z)) -> Process (P_CHAN_INPUT (P_FVAR x) P)
-  | CHAN_REPLICATE : forall (x : string) ( P : PProcess), (exists (z : string), Process (P ^ z)) ->  Process (P_CHAN_REPLICATE (P_FVAR x) P).
+Inductive Process_Name : Name -> Prop := 
+  | Process_FName : forall (x : string), Process_Name ( FName x).
+
+
+Inductive Process : Prepro -> Prop :=
+  | Zero : Process Prezero
+  
+  | Fuse : forall x y : Name, 
+    Process_Name x -> Process_Name y -> Process ( [ x ←→ y] )
+    
+  | Parallel : forall P Q : Prepro, 
+    Process P -> Process Q -> Process (P ↓ Q)
+    
+  | Output : forall (x y : Name ) (P : Prepro),
+    Process_Name x -> Process_Name y -> Process ( x «y»· P)
+  
+  | Chan_zero : forall x : Name, 
+    Process_Name x -> Process ( x «»·° )
+    
+  | Chan_close : forall (x : Name)(P : Prepro),
+    Process_Name x -> Process P -> Process ( x ()· P )
+  
+  | Chan_res : forall P : Prepro, 
+    (exists (z : string), Process (P ^ z) ) -> Process (ν P)
+  
+  | Chan_input : forall (x : Name ) (P: Prepro), 
+    Process_Name x -> (exists (z : string), Process (P ^ z) ) -> Process ( x · P)
+   
+  | Chan_replicate : forall (x : Name) (P : Prepro),
+    Process_Name x -> (exists (z : string), Process (P ^ z) ) -> Process ( x !· P ).
 
 
 (*
@@ -148,16 +181,17 @@ Observe que hay reglas que no tienen mucho significado bajo la relación de NLR
 
 Observe que no uso explicitamente los constructores ya que la notación se encarga de que tenga sentido
 *)
-Definition Parallel_Zero ( P : PProcess ) := (P↓°) = P.
-Definition Conmt_Parallel ( P Q : PProcess ) := (P↓Q) = (Q↓P).
-Definition Res_Zero ( x : string ) := ( ν °)  = °.
-Definition Asoc_Parallel ( P Q R : PProcess ) := ((P↓Q)↓R) = (Q↓(P↓R)).
-Definition Conmt_Fuses ( x y : string ) := [x ←→ y] = [y ←→ x].
+Definition Parallel_Zero ( P : Prepro ) := (P↓°) = P.
+Definition Conmt_Parallel ( P Q : Prepro ) := (P↓Q) = (Q↓P).
+Definition Res_Zero := ( ν °)  = °.
+Definition Asoc_Parallel ( P Q R : Prepro ) := ((P↓Q)↓R) = (P↓(Q↓R)).
+Definition Conmt_Fuses ( x y : Name ) := [x ←→ y] = [y ←→ x].
 (*
 para la última regla no se usa la condición que x no sea nombre libre en P puesto que no tiene sentido por LNR
 en vez de ello se debe pedir que sea una expresión bien formada o sea un proceso
 *)
-Definition Abs_Restriction ( P Q : PProcess ) := Process(P) -> (P↓(ν Q)) = ν (Q↓P).
+Definition Abs_Restriction ( P Q : Prepro ) := Process(P) -> (P↓(ν Q)) = ν (Q↓P).
+
 
 
 (*
@@ -165,26 +199,32 @@ Se introducen las reducciones de la definición 2.5
 
 Los 'if' quedaron bastante feos, no entiendo porque no acepta el operador && para bool y el =? para cadenas
 
+Bajo la nueva mirada es necesario definir una sustitución para nombres 
+
 *)
-Fixpoint Name_Substitution ( x y : string )( T : PProcess ) {struct T} : PProcess := 
-match T with
-  | P_FVAR z => if ( String.eqb x z ) then (P_FVAR y) else (P_FVAR z) 
-  | P_BVAR i => P_BVAR i
-  (* Ahora vienen los procesos bajo la nueva gramática *)
-  | P_ZERO => P_ZERO
-  | P_FUSES P Q => P_FUSES  (Name_Substitution x y P)  (Name_Substitution x y Q)
-  | P_PARALLEL_COMP P Q => P_PARALLEL_COMP  (Name_Substitution x y P) (Name_Substitution x y Q)
-  | P_CHAN_OUTPUT P Q R => P_CHAN_OUTPUT  (Name_Substitution x y P) (Name_Substitution x y Q)  (Name_Substitution x y R)
-  | P_CHAN_ZERO P => P_CHAN_ZERO  (Name_Substitution x y P)
-  | P_CHAN_CLOSE P Q => P_CHAN_CLOSE  (Name_Substitution x y P)  (Name_Substitution x y Q)
-  (*Cambian las definiciones para incluir las variables *)
-  | P_CHAN_RES P => P_CHAN_RES  (Name_Substitution x y P)
-  | P_CHAN_INPUT P Q   => P_CHAN_INPUT  (Name_Substitution x y P)  (Name_Substitution x y Q)
-  | P_CHAN_REPLICATE P Q  => P_CHAN_REPLICATE  (Name_Substitution x y P)  (Name_Substitution x y Q)
+
+Definition Name_subst ( x y : string)( N : Name ) : Name := 
+match N with 
+  | FName z => if ( String.eqb x z ) then (FName y) else (FName z)
+  | BName i => BName i 
 end.
 
-Notation " { y \ x } P " := (Name_Substitution x y P) (at level 60). 
 
+Fixpoint Subst ( x y : string )( T : Prepro ) {struct T} : Prepro := 
+match T with
+  | Prezero => Prezero 
+  | Prefuse u v => Prefuse (Name_subst x y u ) (Name_subst x y v)
+  | Preparallel P Q => Preparallel (Subst x y P) (Subst x y Q)
+  | Preoutput u v P => Preoutput (Name_subst x y u) (Name_subst x y v) (Subst x y P)
+  | Prechan_zero u => Prechan_zero (Name_subst x y u )
+  | Prechan_close u P => Prechan_close (Name_subst x y u) (Subst x y P)
+  (* preprocesos con variables ligadas *)
+  | Prechan_res P => Prechan_res (Subst x y P)
+  | Prechan_input u P  => Prechan_input (Name_subst x y u) (Subst x y P)
+  | Prechan_replicate u P =>  Prechan_replicate (Name_subst x y u) (Subst x y P)
+end.
+
+Notation " { y \ x } P " := (Subst x y P) (at level 60). 
 
 
 (*
@@ -192,53 +232,70 @@ Se define la noción de cerradura de un proceso bajo la restricción ν
 Observe que a diferencia del artículo de NLR aquí hay 3 tipos de ligamiento y se debería definir por cada unor
 una noción de cerradura diferente
 *)
-Fixpoint Close_Rec (k : nat)( z : string )( T : PProcess ) {struct T} : PProcess := 
+
+Definition Close_name (k : nat)(z : string)(N : Name) : Name := 
+match N with 
+  | FName x => if ( String.eqb x z ) then (BName k) else (FName x)
+  | BName i => BName i
+end.
+ 
+Fixpoint Close_rec (k : nat)( z : string )( T : Prepro ) {struct T} : Prepro := 
 match T with
-  | P_FVAR x => if ( String.eqb x z ) then (P_BVAR k) else (P_FVAR x) 
-  | P_BVAR i => P_BVAR i
-  (* Ahora vienen los procesos bajo la nueva gramática *)
-  | P_ZERO => P_ZERO
-  | P_FUSES P Q => P_FUSES (Close_Rec k z P) (Close_Rec k z Q)
-  | P_PARALLEL_COMP P Q => P_PARALLEL_COMP (Close_Rec k z P) (Close_Rec k z Q)
-  | P_CHAN_OUTPUT P Q R => P_CHAN_OUTPUT (Close_Rec k z P) (Close_Rec k z Q) (Close_Rec k z R)
-  | P_CHAN_ZERO P => P_CHAN_ZERO (Close_Rec k z P)
-  | P_CHAN_CLOSE P Q => P_CHAN_CLOSE (Close_Rec k z P) (Close_Rec k z Q)
-  (*Cambian las definiciones para incluir las variables *)
-  | P_CHAN_RES P => P_CHAN_RES (Close_Rec (S k) z P)
-  | P_CHAN_INPUT P Q   => P_CHAN_INPUT (Close_Rec (S k) z P) (Close_Rec (S k) z Q ) 
-  | P_CHAN_REPLICATE P Q  => P_CHAN_REPLICATE (Close_Rec (S k) z P) (Close_Rec (S k) z Q)
+  | Prezero => Prezero
+  | Prefuse x y => Prefuse (Close_name k z x) (Close_name k z y)
+  | Preparallel P Q => Preparallel (Close_rec k z P) (Close_rec k z Q)
+  | Preoutput x y P  => Preoutput (Close_name k z x) (Close_name k z y) (Close_rec k z P)
+  | Prechan_zero x => Prechan_zero  (Close_name k z x)
+  | Prechan_close x P => Prechan_close (Close_name k z x) (Close_rec k z P)
+  (* preprocesos con variables ligadas *)
+  | Prechan_res P =>  (Close_rec (S k) z P)
+  | Prechan_input x P => Prechan_input (Close_name k z x)  (Close_rec (S k) z P)
+  | Prechan_replicate x P => Prechan_replicate (Close_name k z x)  (Close_rec (S k) z P)
 end.
 
-Notation "{ k ν<~ z } P " := (ν (Close_Rec k z P))(at level 60).
+Notation "{ k ν<~ z } P " := (ν (Close_rec k z P))(at level 60).
 
-Definition Close_Restriction P z := ν (Close_Rec 0 z P).
+Definition Close_Restriction P z := ν (Close_rec 0 z P).
 Notation " z '/ν' P  " := (Close_Restriction P z)(at level 60).
+
+Definition body (P  : Prepro) := exists ( z : string), Process( P ^ z).
 
 
 Reserved Notation "R '-->' S" (at level 60).
-Inductive ProcessReduction : PProcess -> PProcess -> Prop :=
-  | Red_Comp_Input_Output : forall ( P Q : PProcess) (x y : string),
-    ( (x « y »· P  ) ↓ ( x · Q ) ) --> ( P ↓ ( Q ^ y ) )
+Inductive Reduction : Prepro -> Prepro -> Prop :=
 
-  | Red_Output_Replicate : forall ( P Q : PProcess) (x y : string), 
-    ( (x « y »· P  ) ↓ (  x !· Q ) ) --> ( P ↓ ( Q ^ y ) ↓ (  x !· Q ))
+  | Red_ChZero_ChClose : forall ( Q : Prepro) (x : Name), 
+     Process ( x «»·° ) -> Process ( x ()· Q  ) -> ( ( ( x «»·° ) ↓ ( x ()· Q ) ) -->  Q )
 
-  | Red_ChZero_ChClose : forall ( Q : PProcess) (x : string), 
-    ( (x «»·° ) ↓ ( x ()· Q ) ) -->  Q
-
-  | Red_Reduction_Parallel : forall ( P Q R : PProcess), 
-    (P --> R) -> ((P ↓ Q ) --> (P ↓ R))
-  
-  | Red_Reduction_Restriction : forall ( P Q : PProcess) ( y : string), 
-    (P --> Q) -> ( ( y /ν P ) --> ( y /ν Q ) )
+  | Red_Reduction_Parallel : forall ( P Q R : Prepro), 
+    Process R -> Process Q -> Process R -> ((P --> R) -> ((P ↓ Q ) --> (P ↓ R)))
   
 (*   | Red_Process_Fuses : forall ( P : PProcess) (x y : string), 
     ( P ↓ ( [ x ←→ y] ) ) -->  P{y/x} *)
 
-where "R '-->' S" := (ProcessReduction R S).
-Hint Constructors ProcessReduction : core.
+where "R '-->' S" := (Reduction R S).
+Hint Constructors Reduction : core.
 
 
+Theorem ProcessReduction_WD : 
+forall P Q : Prepro, 
+(P --> Q) -> Process(P)  -> Process(Q).
+Proof.
+  intros. 
+  induction H.
+  + inversion H1.
+    assumption.
+  + constructor.
+    - inversion H0.
+      assumption.
+    - assumption.
+Qed.
+
+
+
+
+
+(*
 Fixpoint IsFreeFor ( y : string )( T : PProcess ) {struct T} : Prop := 
 match T with
   | P_FVAR x => ~ ( x = y )
@@ -388,7 +445,7 @@ Proof.
       inversion H2.
       assumption.
     - 
-
+*)
  
 
  
