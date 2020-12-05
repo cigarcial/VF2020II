@@ -22,7 +22,7 @@ Qed.
 
 Proposition Dual_Implication_Tensor : 
 forall A B : ULLType , 
-(A −∘ B)^⊥ = A ⊗ (B^⊥).
+((A −∘ B)^⊥) = (A ⊗ (B^⊥)).
 Proof.
   intros.
   unfold ULLT_IMP.
@@ -33,7 +33,7 @@ Qed.
 
 Proposition Dual_Tensor_Implication :  
 forall A B : ULLType, 
-(A ⊗ B )^⊥ = A −∘ (B^⊥).
+((A ⊗ B )^⊥) = (A −∘ (B^⊥)).
 Proof.
   intros.
   simpl.
@@ -43,7 +43,7 @@ Qed.
 
 Proposition Doble_Dual_Implication : 
 forall A B : ULLType, 
-((A −∘ B)^⊥)^⊥ = A −∘ B.
+(((A −∘ B)^⊥)^⊥) = (A −∘ B).
 Proof.
   intros.
   unfold ULLT_IMP.
@@ -57,30 +57,12 @@ En las definiciones se encuentran las equivalencias de la definición 2.4, sin e
 dichas equivalencias. Es decir, si partimos de un proceso obtenemos un proceso.
 *)
 
-Lemma Conmt_Fuses :
-forall x y : string,
-  Process([x ←→ y]) <-> Process([y ←→ x]).
-Proof. 
-  split.
-  - intros.
-    constructor.
-  - intros.
-    constructor.
-Qed.
 
-Lemma Equiv_Process_Zero : 
-forall P : PProcess, 
-Process (P ↓ °) <->  (Process P).
-Proof. 
-  split.
-  - intros.
-    inversion H.
-    assumption.
-  - intros.
-    constructor.
-    + assumption.
-    + constructor.
-Qed.
+
+
+Lemma Process_IsFreeFor : 
+forall ( x : string )( P : PProcess ), 
+Process P -> 
 
 
 (*
@@ -91,15 +73,8 @@ Theorem ProcessReduction_WD :
 forall P Q : PProcess, 
 (P --> Q) -> Process(P)  -> Process(Q).
 Proof.
-  intros.
-  induction H.
-  - inversion H0. 
-    constructor.
-    + inversion H2.
-      assumption.
-    + inversion H3.
-      destruct H5.
-  
+
+
 
 
 
