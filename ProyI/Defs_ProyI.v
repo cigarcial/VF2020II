@@ -1,6 +1,6 @@
 (*
   Verificación Formal - Unam 2020-2
-  Ciro Iván García López
+  Ciro Iván García López 
   Proyecto 1. Session Type Systems Verification
 *) 
 From Coq Require Import Strings.String.
@@ -8,16 +8,16 @@ From Coq Require Import Nat.
 From Coq Require Import Lists.List.
 
  
-Inductive ULLType : Type := 
-  | ONE : ULLType
-  | ABS : ULLType
-  | TEN (A : ULLType) (B : ULLType) : ULLType
-  | PAR (A : ULLType) (B : ULLType) : ULLType
+Inductive Proposition : Type := 
+  | ONE : Proposition
+  | ABS : Proposition
+  | TEN (A : Proposition) (B : Proposition) : Proposition
+  | PAR (A : Proposition) (B : Proposition) : Proposition
 (*   | ULLT_IMP (A : ULLType) (B : ULLType) : ULLType  *)
-  | EXP (A : ULLType) : ULLType
-  | MOD (A : ULLType) : ULLType.
+  | EXP (A : Proposition) : Proposition
+  | MOD (A : Proposition) : Proposition.
 
-Hint Constructors ULLType : core.
+Hint Constructors Proposition : core.
 
 (*
 Notación de acuerdo al artículo, sin embargo falta definir bien los niveles y la asociatividad 	
@@ -31,20 +31,20 @@ Notation "! A" := (EXP A)(at level 60, right associativity).
 Notation "? A" := (MOD A)(at level 60, right associativity).
 
 
-Fixpoint Dual_ULLT ( T : ULLType ) : ULLType := 
+Fixpoint Dual_prop ( T : Proposition ) : Proposition := 
 match T with 
   | ¶ => ⊥
   | ⊥ => ¶
-  | A ⊗ B => (Dual_ULLT A) ⅋ (Dual_ULLT B)
-  | A ⅋ B => (Dual_ULLT A) ⊗ (Dual_ULLT B)
-  | ! A => ? (Dual_ULLT A)
-  | ? A => ! (Dual_ULLT A)
+  | A ⊗ B => (Dual_prop A) ⅋ (Dual_prop B)
+  | A ⅋ B => (Dual_prop A) ⊗ (Dual_prop B)
+  | ! A => ? (Dual_prop A)
+  | ? A => ! (Dual_prop A)
 end.
 
-Hint Unfold Dual_ULLT : core.
+Hint Unfold Dual_prop : core.
 
-Notation "A '^⊥'" := (Dual_ULLT A)(at level 60, right associativity).
-Definition ULLT_IMP (A : ULLType) (B : ULLType) : ULLType := (A^⊥) ⅋ B.
+Notation "A '^⊥'" := (Dual_prop A)(at level 60, right associativity).
+Definition ULLT_IMP (A : Proposition) (B : Proposition) : Proposition := (A^⊥) ⅋ B.
 
 Notation "A −∘ B" := (ULLT_IMP A B)(at level 70, right associativity).
 
