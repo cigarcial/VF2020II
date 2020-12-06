@@ -171,6 +171,7 @@ Inductive Process : Prepro -> Prop :=
    
   | Chan_replicate : forall (x : Name) (P : Prepro)(L : list Name),
     Process_Name x -> ( forall (x : Name), ~ (In x L) -> Process (P ^ x) ) -> Process ( x !· P ).
+Hint Constructors Process : core.
 
 
 (*
@@ -216,21 +217,114 @@ Notation " { y \ x } P " := (Subst x y P) (at level 60).
  
 Definition Body (P  : Prepro) := forall (x : Name)(L : list Name), ~ (In x L) -> Process (P ^ x).
 
+(*
+  La hipotesis adicional es un mecanizar la idea que todas las sustituciones no involucran variables libres o ligadas
+*)
 Reserved Notation "R '-->' S" (at level 60).
 Inductive Reduction : Prepro -> Prepro -> Prop :=
+
+  | Red_output_input : forall ( x y : Name ) ( P Q : Prepro ), 
+    Process P -> Body Q -> (exists (L : list Name) , ~( In y L ) ) -> (( (x « y »· P)  ↓ (x · Q) ) --> (P ↓ (Q ^ y )) )
+
+  | Red_parallel_replicate : forall (x y : Name) (P Q : Prepro),
+    Process P -> Body Q -> (exists (L : list Name) , ~( In y L ) ) -> 
+      (( (x « y »· P) ↓ (x !· Q )  ) --> ( P ↓ Q^y ↓ (x !· Q) ))
 
   | Red_chzero_chclose : forall ( Q : Prepro) (x : Name), 
      Process ( x «»·° ) -> Process ( x ()· Q  ) -> ( ( ( x «»·° ) ↓ ( x ()· Q ) ) -->  Q )
 
+  | Red_parallel_fuse : forall ( x y : Name) ( P : Prepro),
+    Process P -> ( (P ↓ [x←→y]) --> (Subst x y P) )
+
   | Red_reduction_parallel : forall ( P Q R : Prepro), 
     Process R -> Process Q -> Process R -> ((P --> R) -> ((P ↓ Q ) --> (P ↓ R)))
   
-  | Red_output_input : forall ( x y : Name ) ( P Q : Prepro ), 
-    Process P -> Body Q -> (exists (L : list Name) , ~( In y L ) ) -> (( (x « y »· P)  ↓ (x · Q) ) --> (P ↓ (Q ^ y )) )
-
-  
 where "R '-->' S" := (Reduction R S).
 Hint Constructors Reduction : core.
+
+
+Lemma Aux2 : 
+forall x y z : Name ,
+Process_Name x -> Process_Name y -> Process_Name z -> ((Subst_name x y z = y) \/ (Subst_name x y z = z)).
+Proof.
+  intros.
+  inversion H. inversion H0. inversion H1.
+  specialize (string_dec x2 x0).
+  intro.
+  inversion H5.
+  (* buscar una manera más bonita de probar esto, no es un resultado 'difícil'  *)
+  + assert ( HB : String.eqb x2 x0 = true).
+    - remember ( eqb_spec x2 x0).
+      inversion r; tauto. 
+    - simpl. rewrite -> HB.
+      auto.
+  + assert ( HB : String.eqb x2 x0 = false).
+    - remember ( eqb_spec x2 x0).
+      inversion r; tauto.
+    - simpl. rewrite -> HB. auto.
+Qed.
+
+Lemma Aux1 : 
+forall ( x y : Name ) (P : Prepro), 
+Process P -> Process_Name x -> Process_Name y -> Process ( { y \ x } P ).
+Proof.
+  intros.
+  induction P.
+  + auto.
+  + inversion H.
+    assert (HA : ((Subst_name x y x0 = y) \/ (Subst_name x y x0 = x0)) ). apply Aux2; auto.
+    assert (HB : ((Subst_name x y y0 = y) \/ (Subst_name x y y0 = y0)) ). apply Aux2; auto.
+    simpl.
+    constructor.
+    - destruct HA;
+       destruct HB;
+         try rewrite -> H6; 
+         inversion H1; inversion H4;
+         constructor.
+    - destruct HA;
+       destruct HB;
+         rewrite -> H7;
+         inversion H1; inversion H5;
+         constructor.
+  + simpl.
+    inversion H.
+    constructor; auto.
+  + inversion H.
+    assert (HA : ((Subst_name x y x0 = y) \/ (Subst_name x y x0 = x0)) ). apply Aux2; auto.
+    assert (HB : ((Subst_name x y y0 = y) \/ (Subst_name x y y0 = y0)) ). apply Aux2; auto.
+    simpl.
+    constructor.
+    - destruct HA;
+       destruct HB;
+         try rewrite -> H7;
+         inversion H1; inversion H4;
+         constructor.
+    - destruct HA;
+       destruct HB;
+         rewrite -> H8;
+         inversion H1; inversion H6;
+         constructor.
+  + inversion H.
+    assert (HA : ((Subst_name x y x0 = y) \/ (Subst_name x y x0 = x0)) ). apply Aux2; auto.
+    simpl.
+    constructor. 
+    destruct HA;
+      try rewrite -> H4;
+      inversion H1; inversion H3;
+      constructor.
+  + inversion H.
+    assert (HA : ((Subst_name x y x0 = y) \/ (Subst_name x y x0 = x0)) ). apply Aux2; auto.
+    simpl. 
+    constructor.
+    - destruct HA;
+        try rewrite -> H6;
+        inversion H1; inversion H4;
+        constructor.
+    - auto.
+  + admit.
+  + admit.
+  + admit.
+Admitted.
 
 
 
@@ -241,21 +335,36 @@ forall P Q : Prepro,
 Proof.
   intros. 
   induction H.
-  - inversion H1.
-    assumption.
-  - inversion H0.
-    constructor; assumption.
-  - constructor.
-    + assumption.
-    + unfold Body in H1.
+  + constructor.
+    - assumption.
+    - unfold Body in H1.
       destruct H2 as [L HL].
       specialize (H1 y L).
       auto.
+  + constructor.
+    - constructor.
+      * assumption.
+      * unfold Body in H1.
+        destruct H2 as [L HL].
+        specialize (H1 y L).
+        auto.
+    - inversion H0. auto.
+  + inversion H1.
+    assumption.
+  + inversion H0.
+    inversion H4.
+    apply Aux1; auto.
+  + inversion H0.
+    constructor; assumption.
 Qed.
 
 
-
-
+Definition Parallel_Zero ( P : Prepro ) := (P↓°) = P.
+Definition Conmt_Parallel ( P Q : Prepro ) := (P↓Q) = (Q↓P).
+Definition Res_Zero := ( ν °)  = °.
+Definition Asoc_Parallel ( P Q R : Prepro ) := ((P↓Q)↓R) = (P↓(Q↓R)).
+Definition Conmt_Fuses ( x y : Name ) := [x ←→ y] = [y ←→ x].
+Definition Abs_Restriction ( P Q : Prepro ) := Process(P) -> (P↓(ν Q)) = ν (Q↓P).
 
 
 
