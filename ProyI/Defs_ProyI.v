@@ -5,6 +5,7 @@
 *) 
 From Coq Require Import Strings.String.
 From Coq Require Import Nat. 
+From Coq Require Import Lists.List.
 
  
 Inductive ULLType : Type := 
@@ -105,12 +106,12 @@ Se usa la misma notación del artículo de Charguéraud
 
 Se necesita ahora distinguir dos aperturas uno para preprocesos y otra para los nombres.
 *) 
-
+ 
 Definition Open_Name ( k : nat )(z: string)( N : Name ) : Name := 
 match N with 
   | FName x => FName x
   | BName i => if ( k =? i ) then (FName z) else (BName i)
-end.
+end. 
 
 (* Ahora la apertura de preprocesos bajo la nueva gramática *)
 Fixpoint Open_Rec (k : nat)( z : string )( T : Prepro ) {struct T} : Prepro := 
@@ -133,17 +134,27 @@ Notation "P ^ z" := (Open P z).
 
 
 (*
+Para abrir terminos con un nombre dado, tiene sentido para hablar de {y/x}
+*)
+Definition Open_wname ( N : Name ) ( T : Prepro ) : Prepro := 
+match N with
+  | FName z => Open_Rec 0 z T
+  | BName z => T
+end.
+
+
+(*
 Y como también menciona el artículo de LNR, con la nueva gramática se introducen términos extraños 
 que no hacian parte de la gramática original; por lo que se debe definir el predicado local closure 
 que básicamente es tomar los términos que si nos sirven y descartar lo demás.
 
 Hay que incluir el hecho que una FName es un nombre de proceso 
 *)
- 
+
 Inductive Process_Name : Name -> Prop := 
   | Process_FName : forall (x : string), Process_Name ( FName x).
 
-
+ 
 Inductive Process : Prepro -> Prop :=
   | Zero : Process Prezero
   
@@ -199,32 +210,31 @@ Se introducen las reducciones de la definición 2.5
 
 Los 'if' quedaron bastante feos, no entiendo porque no acepta el operador && para bool y el =? para cadenas
 
-Bajo la nueva mirada es necesario definir una sustitución para nombres 
+Bajo la nueva mirada es necesario definir una sustitución para nombres {y/x}
 
 *)
 
-Definition Name_subst ( x y : string)( N : Name ) : Name := 
+Definition Subst_name ( x y : string)( N : Name ) : Name := 
 match N with 
   | FName z => if ( String.eqb x z ) then (FName y) else (FName z)
   | BName i => BName i 
 end.
 
-
 Fixpoint Subst ( x y : string )( T : Prepro ) {struct T} : Prepro := 
 match T with
   | Prezero => Prezero 
-  | Prefuse u v => Prefuse (Name_subst x y u ) (Name_subst x y v)
+  | Prefuse u v => Prefuse (Subst_name x y u ) (Subst_name x y v)
   | Preparallel P Q => Preparallel (Subst x y P) (Subst x y Q)
-  | Preoutput u v P => Preoutput (Name_subst x y u) (Name_subst x y v) (Subst x y P)
-  | Prechan_zero u => Prechan_zero (Name_subst x y u )
-  | Prechan_close u P => Prechan_close (Name_subst x y u) (Subst x y P)
+  | Preoutput u v P => Preoutput (Subst_name x y u) (Subst_name x y v) (Subst x y P)
+  | Prechan_zero u => Prechan_zero (Subst_name x y u )
+  | Prechan_close u P => Prechan_close (Subst_name x y u) (Subst x y P)
   (* preprocesos con variables ligadas *)
   | Prechan_res P => Prechan_res (Subst x y P)
-  | Prechan_input u P  => Prechan_input (Name_subst x y u) (Subst x y P)
-  | Prechan_replicate u P =>  Prechan_replicate (Name_subst x y u) (Subst x y P)
+  | Prechan_input u P  => Prechan_input (Subst_name x y u) (Subst x y P)
+  | Prechan_replicate u P =>  Prechan_replicate (Subst_name x y u) (Subst x y P)
 end.
-
 Notation " { y \ x } P " := (Subst x y P) (at level 60). 
+
 
 
 (*
@@ -257,24 +267,88 @@ Notation "{ k ν<~ z } P " := (ν (Close_rec k z P))(at level 60).
 
 Definition Close_Restriction P z := ν (Close_rec 0 z P).
 Notation " z '/ν' P  " := (Close_Restriction P z)(at level 60).
-
-Definition body (P  : Prepro) := exists ( z : string), Process( P ^ z).
+ 
+Definition Body (P  : Prepro) := exists ( z : string), Process( P ^ z).
 
 
 Reserved Notation "R '-->' S" (at level 60).
 Inductive Reduction : Prepro -> Prepro -> Prop :=
 
-  | Red_ChZero_ChClose : forall ( Q : Prepro) (x : Name), 
+  | Red_chzero_chclose : forall ( Q : Prepro) (x : Name), 
      Process ( x «»·° ) -> Process ( x ()· Q  ) -> ( ( ( x «»·° ) ↓ ( x ()· Q ) ) -->  Q )
 
-  | Red_Reduction_Parallel : forall ( P Q R : Prepro), 
+  | Red_reduction_parallel : forall ( P Q R : Prepro), 
     Process R -> Process Q -> Process R -> ((P --> R) -> ((P ↓ Q ) --> (P ↓ R)))
   
-(*   | Red_Process_Fuses : forall ( P : PProcess) (x y : string), 
+  | Red_output_input : forall ( x y : Name ) ( P Q : Prepro ), 
+    Process P -> Body Q -> (( (x « y »· P)  ↓ (x · Q) ) --> (P ↓ (Open_wname y Q)) )
+  
+  
+  
+(* 
+
+| Red_parallel_fuses : forall (x y : Name) (P : Prepro),
+    Process P -> Process ([ x ←→ y ]) -> ( ( P ↓ [ x ←→ y] ) --> ( Open_wname x P ) ) 
+
+
+
+  | Red_Process_Fuses : forall ( P : PProcess) (x y : string), 
     ( P ↓ ( [ x ←→ y] ) ) -->  P{y/x} *)
 
 where "R '-->' S" := (Reduction R S).
 Hint Constructors Reduction : core.
+
+Definition Nofnamein_name (z : string)( N : Name) : Prop :=
+match N with 
+  | FName x => if (String.eqb x z ) then False else True
+  | BName i => True
+end.
+
+
+Fixpoint Nofnamein_rec ( z : string) (T : Prepro) {struct T} : Prop :=
+match T with
+  | Prezero => True
+  | Prefuse x y => (Nofnamein_name z x ) /\ (Nofnamein_name z y)
+  | Preparallel P Q => (Nofnamein_rec z P) /\ (Nofnamein_rec z Q)
+  | Preoutput x y P  => (Nofnamein_name z x ) /\ (Nofnamein_name z y ) /\ (Nofnamein_rec z P)
+  | Prechan_zero x => (Nofnamein_name z x )
+  | Prechan_close x P => (Nofnamein_name z x ) /\ (Nofnamein_rec z P)
+  (* preprocesos con variables ligadas *)
+  | Prechan_res P => (Nofnamein_rec z P)
+  | Prechan_input x P => (Nofnamein_name z x ) /\ (Nofnamein_rec z P)
+  | Prechan_replicate x P => (Nofnamein_name z x ) /\ (Nofnamein_rec z P)
+end.
+
+
+
+Lemma Aux1 : 
+forall (z : string) ( P : Prepro), 
+Body P -> Nofnamein_rec z P -> Process ( P ^ z ).
+Proof.
+(*   intros.
+  induction P.
+  + unfold Open. simpl. constructor.
+  + unfold Body in H. destruct H as [w H]. unfold Open in H. simpl in H. inversion H.
+    inversion H3. inversion H4. unfold Nofnamein_rec in H0. destruct H0 as [HA HB].
+    simpl.
+  + unfold Body in H. destruct H as [w H]. inversion H.
+    inversion H0.
+    unfold Open. simpl. constructor.
+    - apply IHP1.
+      * unfold Body. exists w. assumption.
+      * assumption.
+    - apply IHP2.
+      * unfold Body. exists w. assumption.
+      * assumption.
+  +  *)
+Admitted.
+
+
+
+
+
+
+
 
 
 Theorem ProcessReduction_WD : 
@@ -289,6 +363,14 @@ Proof.
     - inversion H0.
       assumption.
     - assumption.
+  + constructor.
+    - assumption.
+    - inversion H0.
+      inversion H4.
+      inversion H10.
+      unfold Body in H1.
+      simpl.
+      apply Aux1.
 Qed.
 
 
