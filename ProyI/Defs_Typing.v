@@ -3,13 +3,10 @@
   Ciro Iván García López
   Proyecto 1. Session Type Systems Verification
 *)
-
-(*
-Archivo de definiciones para el sistema de tipos
-*)
-
 From Coq Require Import Lists.List.
-From PROYI Require Import  Defs_ProyI.
+Import ListNotations.
+From PROYI Require Import  Defs_Proposition.
+From PROYI Require Import  Defs_Process.
 
 
 Inductive Assignment : Type := assig ( x : Name )( A : Proposition ) : Assignment.
@@ -33,8 +30,11 @@ Inductive Seqn : Sequent -> Prop :=  is_seqn : forall (D F G : list Assignment)(
 Inductive Inference : Sequent -> Prop := 
   | idr : forall (D : list Assignment) (x y : Name) (A : Proposition), 
     Collec D -> Process_Name x -> Process_Name y -> 
-    Inference ( D ;;; (x:A) !- ([x←→y]) ::: ( y:A ) ).
-  
-     
-  
+    Inference ( D ;;; ( cons (x:A) nil ) !- ([x←→y]) ::: [ (y:A) ]  )
+    
+  | idl : forall (D : list Assignment)(x y : Name)(A : Proposition),
+    Collec D -> Process_Name x -> Process_Name y -> 
+    Inference ( D ;;; ( (cons (x:A) nil) ++ (cons (x:(A^⊥)) nil) )  !-  ([x←→y]) ::: []  ).
+
+
 

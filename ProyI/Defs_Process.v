@@ -2,52 +2,11 @@
   Verificación Formal - Unam 2020-2
   Ciro Iván García López 
   Proyecto 1. Session Type Systems Verification
-*) 
-From Coq Require Import Strings.String.
-From Coq Require Import Nat. 
-From Coq Require Import Lists.List.
-
- 
-Inductive Proposition : Type := 
-  | ONE : Proposition
-  | ABS : Proposition
-  | TEN (A : Proposition) (B : Proposition) : Proposition
-  | PAR (A : Proposition) (B : Proposition) : Proposition
-(*   | ULLT_IMP (A : ULLType) (B : ULLType) : ULLType  *)
-  | EXP (A : Proposition) : Proposition
-  | MOD (A : Proposition) : Proposition.
-
-Hint Constructors Proposition : core.
-
-(*
-Notación de acuerdo al artículo, sin embargo falta definir bien los niveles y la asociatividad 	
 *)
-Notation "¶" := ONE.
-Notation "⊥" := ABS.
-Notation "A ⊗ B" := (TEN A B)(at level 70, right associativity).
-Notation "A ⅋ B" := (PAR A B)(at level 70, right associativity).
-(* Notation "A −∘ B" := (ULLT_IMP A B)(at level 50, left associativity). *)
-Notation "! A" := (EXP A)(at level 60, right associativity).
-Notation "? A" := (MOD A)(at level 60, right associativity).
-
-
-Fixpoint Dual_prop ( T : Proposition ) : Proposition := 
-match T with 
-  | ¶ => ⊥
-  | ⊥ => ¶
-  | A ⊗ B => (Dual_prop A) ⅋ (Dual_prop B)
-  | A ⅋ B => (Dual_prop A) ⊗ (Dual_prop B)
-  | ! A => ? (Dual_prop A)
-  | ? A => ! (Dual_prop A)
-end.
-
-Hint Unfold Dual_prop : core.
-
-Notation "A '^⊥'" := (Dual_prop A)(at level 60, right associativity).
-Definition ULLT_IMP (A : Proposition) (B : Proposition) : Proposition := (A^⊥) ⅋ B.
-
-Notation "A −∘ B" := (ULLT_IMP A B)(at level 70, right associativity).
-
+From Coq Require Import Strings.String.
+From Coq Require Import Nat.
+From Coq Require Import Lists.List.
+From PROYI Require Import  Defs_Proposition.
 
 (*
 
@@ -180,7 +139,6 @@ de alpha-equivalencia pero si es necesario introducir las equivalencias entre pr
 *)
 
 
-
 (*
 Se introducen las reducciones de la definición 2.5
 
@@ -242,123 +200,6 @@ Inductive Reduction : Prepro -> Prepro -> Prop :=
 where "R '-->' S" := (Reduction R S).
 Hint Constructors Reduction : core.
 
-
-Lemma Aux2 : 
-forall x y z : Name ,
-Process_Name x -> Process_Name y -> Process_Name z -> ((Subst_name x y z = y) \/ (Subst_name x y z = z)).
-Proof.
-  intros.
-  inversion H. inversion H0. inversion H1.
-  specialize (string_dec x2 x0).
-  intro.
-  inversion H5.
-  (* buscar una manera más bonita de probar esto, no es un resultado 'difícil'  *)
-  + assert ( HB : String.eqb x2 x0 = true).
-    - remember ( eqb_spec x2 x0).
-      inversion r; tauto. 
-    - simpl. rewrite -> HB.
-      auto.
-  + assert ( HB : String.eqb x2 x0 = false).
-    - remember ( eqb_spec x2 x0).
-      inversion r; tauto.
-    - simpl. rewrite -> HB. auto.
-Qed.
-
-Lemma Aux1 : 
-forall ( x y : Name ) (P : Prepro), 
-Process P -> Process_Name x -> Process_Name y -> Process ( { y \ x } P ).
-Proof.
-  intros.
-  induction P.
-  + auto.
-  + inversion H.
-    assert (HA : ((Subst_name x y x0 = y) \/ (Subst_name x y x0 = x0)) ). apply Aux2; auto.
-    assert (HB : ((Subst_name x y y0 = y) \/ (Subst_name x y y0 = y0)) ). apply Aux2; auto.
-    simpl.
-    constructor.
-    - destruct HA;
-       destruct HB;
-         try rewrite -> H6; 
-         inversion H1; inversion H4;
-         constructor.
-    - destruct HA;
-       destruct HB;
-         rewrite -> H7;
-         inversion H1; inversion H5;
-         constructor.
-  + simpl.
-    inversion H.
-    constructor; auto.
-  + inversion H.
-    assert (HA : ((Subst_name x y x0 = y) \/ (Subst_name x y x0 = x0)) ). apply Aux2; auto.
-    assert (HB : ((Subst_name x y y0 = y) \/ (Subst_name x y y0 = y0)) ). apply Aux2; auto.
-    simpl.
-    constructor.
-    - destruct HA;
-       destruct HB;
-         try rewrite -> H7;
-         inversion H1; inversion H4;
-         constructor.
-    - destruct HA;
-       destruct HB;
-         rewrite -> H8;
-         inversion H1; inversion H6;
-         constructor.
-  + inversion H.
-    assert (HA : ((Subst_name x y x0 = y) \/ (Subst_name x y x0 = x0)) ). apply Aux2; auto.
-    simpl.
-    constructor. 
-    destruct HA;
-      try rewrite -> H4;
-      inversion H1; inversion H3;
-      constructor.
-  + inversion H.
-    assert (HA : ((Subst_name x y x0 = y) \/ (Subst_name x y x0 = x0)) ). apply Aux2; auto.
-    simpl. 
-    constructor.
-    - destruct HA;
-        try rewrite -> H6;
-        inversion H1; inversion H4;
-        constructor.
-    - auto.
-  + admit.
-  + admit.
-  + admit.
-Admitted.
-
-
-
-
-Theorem ProcessReduction_WD : 
-forall P Q : Prepro, 
-(P --> Q) -> Process(P)  -> Process(Q).
-Proof.
-  intros. 
-  induction H.
-  + constructor.
-    - assumption.
-    - unfold Body in H1.
-      destruct H2 as [L HL].
-      specialize (H1 y L).
-      auto.
-  + constructor.
-    - constructor.
-      * assumption.
-      * unfold Body in H1.
-        destruct H2 as [L HL].
-        specialize (H1 y L).
-        auto.
-    - inversion H0. auto.
-  + inversion H1.
-    assumption.
-  + inversion H0.
-    inversion H4.
-    apply Aux1; auto.
-  + inversion H0.
-    constructor; assumption.
-Qed.
-
-
 Definition Parallel_Zero ( P : Prepro ) := (P↓°) = P.
 Definition Conmt_Parallel ( P Q : Prepro ) := (P↓Q) = (Q↓P).
 Definition Res_Zero := ( ν °)  = °.
@@ -367,13 +208,3 @@ Definition Conmt_Fuses ( x y : Name ) := [x ←→ y] = [y ←→ x].
 Definition Abs_Restriction ( P Q : Prepro ) := Process(P) -> (P↓(ν Q)) = ν (Q↓P).
 
 
-
-
-
-(*
-⊥
-⊗
-⅋
-−∘
-^⊥
-*)

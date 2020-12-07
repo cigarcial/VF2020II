@@ -4,12 +4,11 @@
   Proyecto 1. Session Type Systems Verification
 *)
 
-From Coq Require Import Strings.String.
-From PROYI Require Import  Defs_ProyI.
+From PROYI Require Import  Defs_Proposition.
 
 
 Proposition Doble_Duality_ULLT  : 
-forall A : ULLType , 
+forall A : Proposition , 
 (A^⊥)^⊥ = A. 
 Proof.
   intros.
@@ -21,7 +20,7 @@ Proof.
 Qed.
 
 Proposition Dual_Implication_Tensor : 
-forall A B : ULLType , 
+forall A B : Proposition , 
 ((A −∘ B)^⊥) = (A ⊗ (B^⊥)).
 Proof.
   intros.
@@ -32,7 +31,7 @@ Proof.
 Qed.
 
 Proposition Dual_Tensor_Implication :  
-forall A B : ULLType, 
+forall A B : Proposition, 
 ((A ⊗ B )^⊥) = (A −∘ (B^⊥)).
 Proof.
   intros.
@@ -42,7 +41,7 @@ Proof.
 Qed.
 
 Proposition Doble_Dual_Implication : 
-forall A B : ULLType, 
+forall A B : Proposition, 
 (((A −∘ B)^⊥)^⊥) = (A −∘ B).
 Proof.
   intros.
@@ -50,39 +49,3 @@ Proof.
   rewrite -> (Doble_Duality_ULLT).
   reflexivity.
 Qed.
-
-
-(*
-En las definiciones se encuentran las equivalencias de la definición 2.4, sin embargo es necesario indicar que son 'coherentes'
-dichas equivalencias. Es decir, si partimos de un proceso obtenemos un proceso.
-*)
-
-
-
-
-Lemma Process_IsFreeFor : 
-forall ( x : string )( P : PProcess ), 
-Process P -> 
-
-
-(*
-Para la definición 2.5 bajo la mirada de NLR es necesario probar que de procesos se obtienen procesos
-*)
-
-Theorem ProcessReduction_WD : 
-forall P Q : PProcess, 
-(P --> Q) -> Process(P)  -> Process(Q).
-Proof.
-
-
-
-
-
-
-(*
-⊥
-⊗
-⅋
-−∘
-^⊥
-*)
