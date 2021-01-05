@@ -7,16 +7,28 @@ From PROYI Require Import  Defs_Typing.
 From PROYI Require Import  Defs_Process.
 From PROYI Require Import  Defs_Proposition.
 
+Check Inference_ind.
 
 Theorem Soundness : 
 forall (D F G : list Assignment)(P Q : Prepro),
-  Seqn ( D ;;; F !- P ::: G ) -> (P --> Q) -> Inference ( D ;;; F !- P ::: G ) 
-  -> Inference ( D ;;; F !- Q ::: G ).
+  ( D ;;; F !- P ::: G ) -> (P --> Q)
+  -> ( D ;;; F !- Q ::: G ).
 Proof.
   intros.
-  induction H1.
-  + inversion H.
-  
-  
-Qed.
-    
+  induction H.
+  + inversion H0.
+  + inversion H0.
+  + inversion H0.
+  + admit.
+  + admit.
+  + inversion H0.
+  + inversion H0.
+  + inversion H0.
+    - 
+  + inversion H0.
+  + admit.
+  + inversion H0.
+  + admit.
+  + inversion H0.
+  + inversion H0.
+Admitted.

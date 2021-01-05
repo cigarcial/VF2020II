@@ -86,10 +86,35 @@ match T with
   | Prechan_replicate x P => Prechan_replicate (Open_Name k z x) (Open_Rec (S k) z P)
 end.
 
+
 Notation "{ k ~> z } P " := (Open_Rec k z P)(at level 60).
 
 Definition Open P z := Open_Rec 0 z P.
 Notation "P ^ z" := (Open P z).
+
+
+Definition Close_Name ( k : nat )( z N : Name ) : Name := 
+match N with
+  | FName n0 => match z with 
+                  | FName x0 => if String.eqb n0 x0 then BName k else N
+                  | BName i0 => N
+                end
+  | BName i => N
+end. 
+
+(* Ahora la apertura de preprocesos bajo la nueva gramática *)
+Fixpoint Close_Rec (k : nat)( z : Name )( T : Prepro ) {struct T} : Prepro := 
+match T with
+  | Prezero => Prezero
+  | Prefuse x y => Prefuse (Close_Name k z x ) (Close_Name k z y )
+  | Preparallel P Q => Preparallel (Close_Rec k z P) (Close_Rec k z Q)
+  | Preoutput x y P => Preoutput (Close_Name k z x) (Close_Name k z y) (Close_Rec k z P) 
+  | Prechan_zero x => Prechan_zero (Close_Name k z x)
+  | Prechan_close x P => Prechan_close (Close_Name k z x) (Close_Rec k z P)
+  | Prechan_res P => Prechan_res (Close_Rec (S k) z P)
+  | Prechan_input x P => Prechan_input (Close_Name k z x) (Close_Rec (S k) z P)
+  | Prechan_replicate x P => Prechan_replicate (Close_Name k z x) (Close_Rec (S k) z P)
+end.
 
 
 (*
@@ -172,8 +197,40 @@ match T with
 end.
 Notation " { y \ x } P " := (Subst x y P) (at level 60). 
 
- 
+
 Definition Body (P  : Prepro) := forall (x : Name)(L : list Name), ~ (In x L) -> Process (P ^ x).
+
+
+
+Reserved Notation "R '===' S" (at level 60).
+Inductive Congruence : Prepro -> Prepro -> Prop :=
+
+    | Con_parallel_zero : forall (P : Prepro),
+    Process P -> 
+      (P↓°) === P
+
+    | Con_conmt_parallel : forall (P Q : Prepro),
+    Process P -> Process Q -> 
+      (P↓Q) === (Q↓P)
+      
+    | Con_res_zero : ( ν °)  === °
+      
+    | Con_asoc_parallel : forall (P Q R : Prepro),
+    Process P -> Process Q -> Process R -> 
+      ((P↓Q)↓R) === (P↓(Q↓R))
+      
+    | Con_conmt_fuses : forall (x y : Name),
+    Process_Name x -> Process_Name y ->
+       [x ←→ y] === [y ←→ x]
+            
+      
+     | Con_abs_restriction : forall (P Q : Prepro),
+    Process P -> Body Q -> 
+     (P↓(ν Q)) === ν (P↓Q)
+     
+where "R '===' S" := (Congruence R S).
+Hint Constructors Congruence : core.
+
 
 (*
   La hipotesis adicional es un mecanizar la idea que todas las sustituciones no involucran variables libres o ligadas
@@ -195,16 +252,16 @@ Inductive Reduction : Prepro -> Prepro -> Prop :=
     Process P -> ( (P ↓ [x←→y]) --> (Subst x y P) )
 
   | Red_reduction_parallel : forall ( P Q R : Prepro), 
-    Process R -> Process Q -> Process R -> ((P --> R) -> ((P ↓ Q ) --> (P ↓ R)))
-  
+    Process R -> Process Q -> Process R -> ((Q --> R) -> ((P ↓ Q ) --> (P ↓ R)))
+
+  | Red_reduction_chanres : forall (P Q : Prepro)( x : Name), 
+    Process P -> Process Q -> Process_Name x -> 
+    ( P --> Q ) -> ( ν (Close_Rec 0 x P) --> ν (Close_Rec 0 x Q) )
+(*
+  | Red_reduction_congruence : forall ( P Q P' Q' : Prepro ), 
+    Process P -> Process Q -> Process P' -> Process Q' 
+    -> Congruence P P' -> Congruence Q Q' -> (P' --> Q') -> 
+    P --> Q
+*)
 where "R '-->' S" := (Reduction R S).
 Hint Constructors Reduction : core.
-
-Definition Parallel_Zero ( P : Prepro ) := (P↓°) = P.
-Definition Conmt_Parallel ( P Q : Prepro ) := (P↓Q) = (Q↓P).
-Definition Res_Zero := ( ν °)  = °.
-Definition Asoc_Parallel ( P Q R : Prepro ) := ((P↓Q)↓R) = (P↓(Q↓R)).
-Definition Conmt_Fuses ( x y : Name ) := [x ←→ y] = [y ←→ x].
-Definition Abs_Restriction ( P Q : Prepro ) := Process(P) -> (P↓(ν Q)) = ν (Q↓P).
-
-
