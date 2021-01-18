@@ -94,3 +94,54 @@ Admitted.
 Inductive Sequent : Type := seqnt ( D F G : list Assignment ) ( P : Prepro ) : Sequent.
 
 Notation " D ';;;'  F '!-' P ':::' G " :=  (seqnt D F G P)(at level 60). 
+
+
+
+
+
+inversion H.
+  + rewrite <- H7 in H0. apply No_Red_AX1 in H0. contradiction.
+  + rewrite <- H7 in H0. apply No_Red_AX1 in H0. contradiction.
+  + rewrite <- H9 in H0. apply No_Red_AX2 in H0. contradiction.
+  + admit. 
+  + admit. 
+  + rewrite <- H9 in H0. apply No_Red_AX2 in H0. contradiction.
+  + rewrite <- H11 in H0. apply No_Red_AX4 in H0. contradiction.
+  + rewrite <- H15 in H0. apply No_Red_AX5 in H0; try contradiction;
+    auto.
+  + rewrite <- H11 in H0. apply No_Red_AX4 in H0. contradiction.
+  + rewrite <- H15 in H0. apply No_Red_AX5 in H0; try contradiction;
+    auto.
+  + rewrite <- H11 in H0. apply No_Red_AX4 in H0. contradiction.
+  + rewrite <- H15 in H0. apply No_Red_AX5 in H0; try contradiction; 
+    auto.
+  + rewrite <- H10 in H0. apply No_Red_AX6 in H0. contradiction.
+  + rewrite <- H6 in H0. inversion H0.
+  + rewrite <- H10 in H0. apply No_Red_AX6 in H0. contradiction.
+  + rewrite <- H6 in H0. inversion H0.
+  + rewrite <- H11 in H0. apply No_Red_AX7 in H0; try contradiction; 
+    auto. 
+  + rewrite <- H11 in H0. apply No_Red_AX7 in H0; try contradiction; auto.
+  +
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

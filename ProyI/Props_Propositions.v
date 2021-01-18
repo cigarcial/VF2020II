@@ -3,10 +3,12 @@
   Ciro Iván García López
   Proyecto 1. Session Type Systems Verification
 *)
-
 From PROYI Require Import  Defs_Proposition.
 
 
+(*
+Observación presente en la definición 2.2 (primer parrafo).
+*)
 Proposition Doble_Duality_ULLT  : 
 forall A : Proposition , 
 (A^⊥)^⊥ = A. 
@@ -19,6 +21,10 @@ Proof.
   - simpl. rewrite -> IHA. reflexivity. 
 Qed.
 
+
+(*
+Prueba de las propiedades descritas en la definición 2.2.
+*)
 Proposition Dual_Implication_Tensor : 
 forall A B : Proposition , 
 ((A −∘ B)^⊥) = (A ⊗ (B^⊥)).
@@ -30,6 +36,7 @@ Proof.
   reflexivity.
 Qed.
 
+
 Proposition Dual_Tensor_Implication :  
 forall A B : Proposition, 
 ((A ⊗ B )^⊥) = (A −∘ (B^⊥)).
@@ -39,6 +46,7 @@ Proof.
   unfold ULLT_IMP.
   reflexivity.
 Qed.
+
 
 Proposition Doble_Dual_Implication : 
 forall A B : Proposition, 
