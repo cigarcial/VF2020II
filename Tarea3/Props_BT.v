@@ -693,7 +693,7 @@ induction t.
     simpl in H6.
     simpl.
     rewrite H6.
-    constructor; auto.
+    constructor; auto. 
     * rewrite bsize_he.
       rewrite H.
       constructor.
@@ -707,11 +707,27 @@ Lemma he_last :
 forall (t: BTree) (x:A),
 lookup_bn (he x t) (bsize t) = x.
 Proof.
-Admitted.
+  intro.
+  induction t.
+  + auto.
+  + intros.
+    simpl.
+    destruct (bbal_size_r a t1 t2);
+      assert(H1 := H);
+      simpl in H1;
+      apply size_caseU in H || apply size_caseD in H;
+      rewrite H1;
+      simpl;
+      try rewrite <- H;
+      apply IHt1 || apply IHt2.
+Qed.
 
 
-Lemma he_idx: forall (t:BTree),  bbal t -> 
-forall (j:BN), j <BN (bsize t) -> forall (x:A), lookup_bn (he x t) j = lookup_bn t j.
+
+Lemma he_idx : 
+forall (t:BTree),  
+bbal t -> forall (j:BN), j <BN (bsize t) -> 
+forall (x:A), lookup_bn (he x t) j = lookup_bn t j.
 Admitted. (* Tarea moral *)
 
 
@@ -727,6 +743,64 @@ Fin del fragmento de código visto en clase
 
 Inicio del fragmento de código propio
 *)
+
+Lemma NTree_noE : 
+forall (t t1 t2 : BTree)( a : A ),
+t = N a t1 t2 -> t <> E.
+Proof.
+  intros.
+  unfold not.
+  intros.
+  rewrite H0 in H.
+  discriminate.
+Qed.
+
+Lemma NTree_noZ : 
+forall (t t1 t2 : BTree)( a : A ),
+t = N a t1 t2 -> (bsize t) <> Z.
+Proof.
+  unfold not.
+  intros.
+  rewrite H in *.
+  simpl in H0.
+  apply ZnotSucBN_sym in H0.
+  contradiction.
+Qed.
+
+Lemma NTree_noZ_sym : 
+forall (t t1 t2 : BTree)( a : A ),
+t = N a t1 t2 -> Z <> (bsize t).
+Proof.
+  intros.
+  apply not_eq_sym.
+  apply (NTree_noZ t t1 t2 a); auto.
+Qed.
+
+Lemma trees_eqbsize_noE :
+forall (t1 t2 T1 T2 : BTree )( a : A), 
+t1 = N a T1 T2 -> bsize t1 = bsize t2 -> t2 <> E.
+Proof.
+  unfold not.
+  intros.
+  rewrite H1 in *.
+  rewrite H in *.
+  simpl in H0.
+  apply ZnotSucBN_sym in H0.
+  contradiction.
+Qed.
+
+Lemma trees_eqbsize_noZ :
+forall (t1 t2 T1 T2 : BTree )( a : A), 
+t1 = N a T1 T2 -> bsize t1 = bsize t2 -> (bsize t2) <> Z.
+Proof.
+  unfold not.
+  intros.
+  rewrite H1 in *.
+  rewrite H in *.
+  simpl in H0.
+  apply ZnotSucBN_sym in H0.
+  contradiction.
+Qed.
 
 Lemma bsize_nZ_nE : 
 forall t : BTree,
@@ -767,13 +841,13 @@ Proof.
         rewrite H4.
         rewrite <- H4.
         rewrite H2.
-        assert ( Ht : t <> E ). unfold not. intros. rewrite H5 in H3.
-        rewrite H4 in H3. simpl in H3. remember (ZnotSucBN_sym (bsize x0 ⊞ bsize x1)). contradiction.
-        apply IHHBal2 in Ht.
+        specialize ( trees_eqbsize_noE s t x0 x1 x) as Ht.
+        apply IHHBal2 in Ht; auto.
         simpl. 
         rewrite Ht.
-        assert ( bsize t <> Z ). rewrite <- H3. rewrite H4. simpl. apply ZnotSucBN_sym.
-        rewrite plusPred.
+        specialize ( trees_eqbsize_noZ s t x0 x1 x) as H5.
+        specialize (H5 H4 H3).
+        rewrite plusPred; auto.
         rewrite  conmt_sucBN_predBN_noZ.
         rewrite H2.
         auto.
@@ -781,8 +855,8 @@ Proof.
         unfold not.
         intros.
         apply plusBN_Z_Z in H6.
-        destruct H6. contradiction.
-        auto.
+        destruct H6.
+        contradiction.
     - assert(H3 := H2).
       apply size_caseD in H3.
       simpl in H2.
@@ -834,39 +908,38 @@ Proof.
         apply nonE_tree in n.
         destruct n as [b [t11 [t12]]].
         simpl. rewrite H3. rewrite <- H3. rewrite H2.
-        assert ( HEt1 : t1 <> E ). apply bsize_nZ_nE. rewrite H3. simpl. apply ZnotSucBN_sym. 
-        assert ( HEt2 : t2 <> E ). apply bsize_nZ_nE. rewrite <- H1. rewrite H3. simpl. apply ZnotSucBN_sym. 
-        constructor; auto.
-        ++ rewrite -> bsize_hr.
+        specialize ( NTree_noE t1 t11 t12 b) as HEt1.
+        specialize ( HEt1 H3).
+        specialize ( trees_eqbsize_noE t1 t2 t11 t12 b) as HEt2.
+        specialize ( HEt2 H3 H1).
+        constructor; try rewrite -> bsize_hr; auto.
+        ++
            assert ( HS : Z <BN bsize t2 ). rewrite <- H1. rewrite -> H3. simpl. apply  Z_min_suc.
            apply (lteqBN_trans _ (bsize t2) _); 
            try apply lt_predBN_lteq in HS;
-           auto. auto.
-        ++ rewrite -> bsize_hr.
-           assert ( HS : Z <> bsize t2 ). rewrite <- H1. rewrite -> H3. simpl. apply ZnotSucBN.
-           apply not_eq_sym in HS.
+           auto. 
+        ++ specialize ( trees_eqbsize_noZ t1 t2 t11 t12 b) as HS.
+           specialize (HS H3 H1).
            apply sucpredBNinv in HS.
            rewrite HS.
            rewrite H1.
            constructor.
-           auto.
       * assert(H2:=H1).
         apply size_caseD in H1.
         simpl in H2. 
         apply nonE_tree in n.
         destruct n as [b [t11 [t12]]].
         simpl. rewrite H3. rewrite <- H3. rewrite H2.
-        assert ( HEt1 : t1 <> E ). apply bsize_nZ_nE. rewrite H3. simpl. apply ZnotSucBN_sym. 
-        constructor; auto.
-        ++ rewrite -> bsize_hr.
-           rewrite -> H1.
+        specialize ( NTree_noE t1 t11 t12 b) as HEt1.
+        specialize ( HEt1 H3).
+        constructor; 
+          try rewrite -> bsize_hr; auto.
+        ++ rewrite -> H1.
            rewrite predsucBNinv.
            constructor.
-           auto. 
-        ++ rewrite -> bsize_hr.
-           assert (HS : Z <> bsize t1). rewrite H3. simpl. apply ZnotSucBN.
+        ++ specialize ( NTree_noZ_sym t1 t11 t12 b) as HS.
+           specialize ( HS H3).
            apply lt_pred_noZ; auto.
-           auto.
 Qed.
 
 
@@ -913,10 +986,10 @@ Proof.
       simpl in H.
       simpl.
       rewrite H.
-      assert ( H0 : exists (a0 : A)(T1 T2 : BTree), (he x t1) = (N a0 T1 T2)). apply he_notE.
+      specialize (he_notE t1 x) as H0.
       do 3 destruct H0.
-      simpl. rewrite  H0. rewrite <- H0. 
-      assert ( HS : bsize (he x t1) = sucBN ( bsize t1)). apply bsize_he.
+      simpl. rewrite  H0. rewrite <- H0.
+      specialize (bsize_he t1 x) as HS.
       rewrite HS.
       rewrite <- plusSuc.
       simpl.
@@ -945,8 +1018,18 @@ Qed.
 
 Lemma change_suc_pred_eq : 
 forall a b : BN, 
-a = sucBN (b) <-> predBN a = b.
-Admitted.
+a <> Z -> a = sucBN (b) <-> predBN a = b.
+Proof.
+  intros a b H0.
+  split.
+  + intros.
+    apply (f_equal predBN) in H.
+    rewrite predsucBNinv in H.
+    auto.
+  + intros.
+    apply (f_equal sucBN) in H.
+    rewrite sucpredBNinv in H; auto.
+Qed.
 
 Lemma char_BTree : 
 forall t : BTree, 
@@ -967,11 +1050,12 @@ Proof.
   induction t.
   + contradiction.
   + intros.
-    assert ( Ht1 : t1 = E \/ exists (a0 : A )(t1_1 t1_2 : BTree), t1 = N a0 t1_1 t1_2). apply char_BTree.
+    specialize ( char_BTree t1) as Ht1.
     (* casos t1 vacío y no vacío *)
     destruct Ht1.
     (* caso t1 vacío*)
-    - rewrite H1 in *. assert ( Ht2 : t2 = E ). apply (leftE_leaf E t2 a); auto.
+    - rewrite H1 in *. 
+      assert ( Ht2 : t2 = E ). apply (leftE_leaf E t2 a); auto.
       rewrite Ht2 in *.
       simpl.
       destruct j; auto.
@@ -991,15 +1075,15 @@ Proof.
            rewrite H2;
            simpl; auto.
       * destruct (bbal_size_r a t1 t2);
-           assert(H3 := H2);
+          assert(H3 := H2);
            simpl in H2;
            simpl;
            rewrite H1;
            rewrite <- H1;
            rewrite H2;
            simpl; auto.
-           (* fin primer tramo*)
-           apply size_caseD in H3. 
+          (* fin primer tramo*)
+          apply size_caseD in H3. 
            simpl in H0.
            rewrite H2 in H0.
            simpl in H0.
@@ -1011,16 +1095,18 @@ Proof.
            unfold not.
            intros. rewrite H14 in H1.
            discriminate.
+           unfold not. intros. rewrite H1 in H7. simpl in H7.
+            apply ZnotSucBN_sym in H7. auto.
       * destruct (bbal_size_r a t1 t2);
-        assert(H3 := H2);
+          assert(H3 := H2);
            simpl in H2;
            simpl;
            rewrite H1;
            rewrite <- H1;
            rewrite H2;
            simpl; auto.
-           (*fin primer tramo*)
-           apply size_caseU in H3. 
+          (*fin primer tramo*)
+          apply size_caseU in H3. 
            simpl in H0.
            rewrite H2 in H0.
            simpl in H0.
@@ -1028,8 +1114,7 @@ Proof.
            apply ZnotSucBN_sym.
            apply bnNonZ in HT.
            destruct HT.
-           assert ( HTT : t2 <> E ). unfold not. intros. rewrite H5 in H3.
-           rewrite H1 in H3. simpl in H3. apply ZnotSucBN_sym in H3. auto.
+           specialize (trees_eqbsize_noE t1 t2 x1 x2 x0) as HTT.
            destruct H4;
            rewrite  H4 in H0;
            rewrite H4 in IHt2;
@@ -1038,9 +1123,150 @@ Proof.
            rewrite IHt2; auto.
 Qed.
 
+Lemma bsize_lr : 
+forall ( t : BTree),
+t <> E -> bsize (lr t) = predBN (bsize t).
+Proof.
+  intro.
+  assert (HBal := allBal t).
+  induction HBal.
+  + contradiction.
+  + intros.
+    destruct (bbal_size_r a s t).
+    - assert(H3 := H2).
+      apply size_caseU in H2.
+      simpl in H3.
+      destruct (eq_btree_dec s E).
+      * assert (Ht : t = E).
+        apply (leftE_leaf s t a).
+        constructor; auto.
+        auto.
+        rewrite e.
+        rewrite Ht.
+        simpl. 
+        auto.
+      * apply nonE_tree in n as H4.
+        do 3 destruct H4.
+        simpl. 
+        rewrite H4.
+        rewrite <- H4.
+        rewrite H2.
+        apply IHHBal1 in n.
+        simpl. 
+        rewrite n.
+        rewrite plusPred.
+        rewrite  conmt_sucBN_predBN_noZ.
+        rewrite H2.
+        auto.
+        unfold not.
+        intros.
+        rewrite <- H2 in H5.
+        rewrite H4 in H5.
+        simpl in H5.
+        rewrite <- plusSuc in H5.
+        apply ZnotSucBN_sym in H5.
+        contradiction.
+        rewrite H4.
+        simpl.
+        apply ZnotSucBN_sym.
+    - assert(H3 := H2).
+      apply size_caseD in H3.
+      simpl in H2.
+      destruct (eq_btree_dec s E).
+      * assert (Ht : t = E).
+        apply (leftE_leaf s t a).
+        constructor; auto.
+        auto.
+        rewrite e.
+        rewrite Ht.
+        simpl. 
+        auto.
+      * apply nonE_tree in n as H4.
+        do 3 destruct H4.
+        simpl. 
+        rewrite H4.
+        rewrite <- H4.
+        rewrite H2.
+        apply IHHBal1 in n.
+        simpl. 
+        rewrite n.
+        rewrite plusPred.
+        rewrite  conmt_sucBN_predBN_noZ.
+        rewrite plusComm.
+        rewrite H2.
+        auto.
+        rewrite H3.
+        rewrite <- plusSuc_2.
+        apply ZnotSucBN_sym.
+        rewrite H4.
+        simpl.
+        apply ZnotSucBN_sym.
+Qed.
 
 
+Lemma bal_lr : 
+forall (t:BTree), 
+t <> E -> bbal t -> bbal (hr t).
+Admitted.
 
+Lemma le_notE : 
+forall ( t : BTree)( x : A),
+exists ( t1 t2 : BTree), le x t = N x t1 t2.
+Proof.
+  intros.
+  induction t.
+  + intros. simpl.
+    do 2 exists E. auto.
+  + intros. simpl.
+    exists (le a t2).
+    exists t1.
+    auto.
+Qed.
+
+Lemma lr_le : 
+forall (t : BTree)(x : A), 
+lr (le x t ) = t.
+Proof.
+  intro.
+  induction t.
+  + intros. simpl. auto.
+  + intros.
+    assert ( le x (N a t1 t2) = N x (le a t2) t1). auto.
+    rewrite H.
+    simpl.
+    specialize (le_notE t2 a) as H0.
+    do 2 destruct H0.
+    rewrite H0. rewrite <- H0.
+    rewrite IHt2.
+    auto.
+Qed.
+
+Lemma le_lkp_lr : 
+forall (t : BTree),
+t <> E -> le (lookup_bn t Z) (lr t) = t.
+Proof.
+  intro. 
+  assert (HBal := allBal t).
+  induction t.
+  + contradiction.
+  + intros.
+    specialize (char_BTree t1) as Ht1.
+    destruct Ht1.
+    - rewrite H0 in *.
+      assert ( Ht2 : t2 = E ). apply (leftE_leaf E t2 a); auto.
+      rewrite Ht2 in *.
+      simpl. 
+      auto.
+    - do 3 destruct H0.
+      simpl. rewrite H0.
+      rewrite <- H0.
+      simpl.
+      assert ( x = (lookup_bn t1 Z)). rewrite H0. auto.
+      rewrite H1.
+      inversion HBal.
+      apply NTree_noE in H0 as HTE.
+      rewrite IHt1; auto.
+Qed.
 
 
 

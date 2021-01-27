@@ -6,4 +6,6 @@
 
 - [Proyecto I:](https://github.com/cigarcial/VF2020II/tree/master/ProyI) En este proyecto se busca mecanizar el artículo: Heuvel, B. & Perez, J. Session Type Systems based on Linear Logic: Classical versus Intuitionistic.
 
+- [Tarea 3:](https://github.com/cigarcial/VF2020II/tree/master/Tarea3) En esta tarea se implementan arreglos flexibles mediante árboles de Braun y se verifican algunas de sus propiedades. 
+
 

@@ -83,27 +83,33 @@ Fixpoint he (x:A) (t:BTree) : BTree  :=
 Lemma le_nonE: forall (a x:A) (t1 t2:BTree), le x (N a t1 t2) =  N x (le a t2) t1.
 *)
 
-
 (*
-FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+Fin del fragmento de código visto en clase
+
+-----------------------------------------------------------
+-----------------------------------------------------------
+-----------------------------------------------------------
+-----------------------------------------------------------
+-----------------------------------------------------------
+-----------------------------------------------------------
+
+Inicio del fragmento de código propio
+
 *)
+
 
 Fixpoint lr (t:BTree) : BTree  :=
 match t with
-  | E => E
-  | N y E _ => E
-  | N y l r => match bsize t with
-                | U b => N y l (lr r)
-                | D b => N y (lr l) r
-                | Z => undefBTree 
+  | E => undefBTree
+  | N y l r => match l with
+                | E => E
+                | N x _ _ => N x r (lr l)
                end
 end.
 
-
-
 Fixpoint hr (t:BTree) : BTree  :=
 match t with
-  | E => E
+  | E => undefBTree
   | N y E _ => E
   | N y l r => match bsize t with
                 | U b => N y l (hr r)
