@@ -29,6 +29,13 @@ intros.
 discriminate.
 Qed.
 
+Lemma ZnotU_sym: forall (a:BN), U a <> Z.
+Proof.
+intros.
+apply not_eq_sym.
+apply ZnotU.
+Qed.
+
 Lemma ZnotD : forall (a:BN), Z <> D a.
 Proof.
 intros.
@@ -445,7 +452,7 @@ Lemma plusSuc_2 : forall (b c: BN), sucBN (b ⊞ c) = b ⊞ sucBN c.
 Proof.
   intro.
   induction b.
-  + intros. do 2 rewrite -> plus_neutro_l. auto.
+  + simpl. auto.
   + destruct c; simpl; try specialize (IHb c); try rewrite -> IHb; try rewrite -> plus_neutro; auto.
   + destruct c;
     simpl;
@@ -455,7 +462,8 @@ Proof.
     auto.
 Qed.
 
-Lemma plusBN_Z_Z: forall (x y:BN), x ⊞ y = Z -> x = Z /\ y = Z.
+Lemma plusBN_Z_Z: forall (x y:BN), 
+x ⊞ y = Z -> x = Z /\ y = Z.
 Proof.
   intro.
   induction x;
@@ -512,7 +520,6 @@ trivial.
 Qed.
 
 
-
 Lemma ltBN_arefl: forall (a:BN), ~ a <BN a.
 Proof.
 intros.
@@ -565,9 +572,72 @@ Hint Resolve ltBN_asym: PNatDb.
 
 (*Lemma ltBN_antisym: forall (a b:BN), ltBN a b -> ltBN b a -> *)
 
-Lemma ltBN_tr: forall (b c:BN), b <BN c -> forall (a:BN), a <BN b -> a <BN c.
+Lemma lt_noZ :
+forall a : BN,
+~ ( a <BN Z ).
 Proof.
-Admitted.
+  unfold not.
+  induction a; try apply ltBN_arefl; try intros; try inversion H. 
+Qed.
+
+
+Lemma ltBN_tr : 
+forall (b c:BN), 
+b <BN c -> forall (a:BN), a <BN b -> a <BN c.
+Proof.
+  intro.
+  intro. intro.
+  induction H.
+  + intros.
+    apply lt_noZ in H. contradiction.
+  + intros.
+    apply lt_noZ in H. contradiction.
+  + intros.
+    inversion H0.
+    - constructor.
+    - subst.
+      constructor.
+      specialize (IHltBN a1).
+      apply IHltBN in H3. auto.
+    - subst.
+      constructor.
+      specialize (IHltBN a1).
+      apply IHltBN in H3. auto.
+  + intros.
+    inversion H.
+    - constructor.
+    - subst.
+      constructor. auto.
+    - subst.
+      constructor. auto.
+  + intros.
+    inversion H0.
+    - constructor.
+    - subst.
+      constructor.
+      specialize (IHltBN a1).
+      apply IHltBN in H3. auto.
+    - subst. constructor.
+      specialize (IHltBN a1).
+      apply IHltBN in H3. auto.
+  + intros. inversion H0.
+    - constructor.
+    - subst. constructor. auto.
+    - subst. constructor.
+      specialize (IHltBN a1).
+      apply IHltBN in H3. auto.
+    - constructor. specialize (IHltBN a1).
+      apply IHltBN in H3. auto.
+  + intros. inversion H0.
+    - constructor.
+    - subst. constructor. auto.
+    - subst. constructor.
+      specialize (IHltBN a1).
+      apply IHltBN in H3. auto.
+    - subst. constructor.
+      specialize (IHltBN a1).
+      apply IHltBN in H3. auto.
+Qed.
 
 Hint Resolve ltBN_tr: PNatDb.
 
@@ -680,13 +750,6 @@ Qed.
 
 Hint Resolve ltpred: PNatDb.
 
-Lemma lt_noZ :
-forall a : BN,
-~ ( a <BN Z ).
-Proof.
-  unfold not.
-  induction a; try apply ltBN_arefl; try intros; try inversion H. 
-Qed.
 
 Lemma lt1 : 
 forall ( b a : BN), 
@@ -703,6 +766,7 @@ Proof.
     - repeat constructor.
     - repeat constructor.
 Admitted.
+
     
 
 Hint Resolve lt1: PNatDb.
@@ -885,16 +949,37 @@ assumption.
 Qed.
 
 
-Lemma lt_U: forall (a b:BN), a <BN b <-> (U a) <BN U b.
-Admitted.
+Lemma lt_U : 
+forall (a b:BN), 
+a <BN b <-> (U a) <BN U b.
+Proof.
+  split.
+  + constructor. auto.
+  + intros. inversion H. auto.
+Qed.
+
 
 Lemma lt_D: forall (a b:BN), a <BN b <-> (D a) <BN D b.
-Admitted.
+Proof.
+  split.
+  + constructor. auto.
+  + intros. inversion H. auto.
+Qed.
 
 
+(*
+Fin del fragmento de código visto en clase
 
-(*FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF*)
+-----------------------------------------------------------
+-----------------------------------------------------------
+-----------------------------------------------------------
+-----------------------------------------------------------
+-----------------------------------------------------------
+-----------------------------------------------------------
 
+Inicio del fragmento de código propio
+
+*)
 
 Lemma lt_Z_diff : 
 forall a : BN,
@@ -935,3 +1020,150 @@ Proof.
   apply lt_imp_lteq in H.
   apply (lteqBN_trans _ a _ ); auto.
 Qed.
+
+Lemma conmt_sucBN_predBN_noZ : 
+forall a : BN, 
+a <> Z -> sucBN ( predBN a) = predBN (sucBN a).
+Proof.
+  induction a.
+  + contradiction.
+  + intros. destruct a.
+    - simpl.  auto.
+    - assert ( HA : U a <> Z). apply ZnotU_sym.
+      assert ( HB : predBN (U (U a )) = D (predBN  (U a))). auto.
+      rewrite HB.
+      assert ( HC : sucBN (D (predBN (U a)))  = U (sucBN (predBN (U a)))). auto.
+      rewrite HC.
+      apply IHa in HA.
+      rewrite HA.
+      simpl.  auto.
+    - auto.
+  + intros. destruct a.
+    - auto.
+    - auto.
+    - assert ( HA : D a <> Z). apply ZnotD_sym.
+      apply IHa in HA.
+      assert ( HB : sucBN (D (D a)) = U ( sucBN ( D a))). auto.
+      rewrite HB.
+      assert ( HC : predBN (U (sucBN (D a))) = D (predBN (sucBN (D a)))). auto.
+      rewrite HC.
+      rewrite <- HA.
+      auto.
+Qed.
+
+Lemma plus_Ub_notZ : 
+forall a b : BN,
+a ⊞ U b <> Z.
+Proof.
+  unfold not.
+  intros.
+  apply plusBN_Z_Z in H.
+  destruct H.
+  apply ZnotU_sym in H0.
+  auto.
+Qed.
+
+Lemma plus_Db_notZ : 
+forall a b : BN,
+a ⊞ D b <> Z.
+Proof.
+  unfold not.
+  intros.
+  apply plusBN_Z_Z in H.
+  destruct H.
+  apply ZnotD_sym in H0.
+  auto.
+Qed.
+
+Lemma plusPred : 
+forall a b : BN ,
+b <> Z -> a ⊞ predBN (b) = predBN ( a ⊞ b).
+Proof.
+  intro.
+  induction a.
+  + simpl. auto.
+  + intros. destruct b.
+    - contradiction.
+    - destruct b.
+      * simpl.
+        rewrite (plus_neutro a).
+        auto.
+      * assert ( U b <> Z ). apply ZnotU_sym. 
+        assert ( predBN (U ( U b )) = D ( predBN ( U b))). auto.
+        rewrite H1.
+        specialize (IHa (U b) ).
+        apply IHa in H0 as HT.
+        simpl. 
+        simpl in HT.
+        rewrite HT.
+        rewrite sucpredBNinv. auto.
+        apply plus_Ub_notZ.
+      * assert ( D b <> Z ). apply ZnotD_sym. 
+        assert ( predBN (U ( D b )) = D ( predBN ( D b))). auto.
+        rewrite H1.
+        assert ( U a ⊞ D (predBN (D b)) = U( sucBN ( a ⊞ predBN (D b) )) ). auto.
+        rewrite H2.
+        specialize (IHa (D b)).
+        apply IHa in H0 as HT.
+        rewrite HT. 
+        rewrite sucpredBNinv. auto.
+        apply plus_Db_notZ.
+    - simpl.
+      destruct (bnNonZ (sucBN (a ⊞ b))).
+      apply ZnotSucBN_sym.
+      destruct H0;
+       rewrite H0; rewrite <- H0;
+       rewrite predsucBNinv; auto.
+  + intros. destruct b.
+    - contradiction.
+    - destruct b.
+      * simpl. rewrite plus_neutro.
+        destruct (bnNonZ (sucBN a)). apply ZnotSucBN_sym.
+        destruct H0; 
+         rewrite  H0; rewrite <- H0;
+         rewrite predsucBNinv; auto.
+      * assert ( U b <> Z ). apply ZnotU_sym. 
+        assert ( predBN (U ( U b )) = D ( predBN ( U b))). auto.
+        rewrite H1.
+        specialize (IHa (U b)).
+        assert ( D a ⊞ D (predBN (U b)) = D ( sucBN ( a ⊞ predBN (U b)))). auto.
+        rewrite H2. 
+        apply IHa in H0 as HT.
+        rewrite HT.
+        assert ( D a ⊞ U (U b) =   U(sucBN ( a ⊞ (U b)))). auto.
+        rewrite H3.
+        simpl.
+        destruct (bnNonZ (sucBN (a ⊞ U b))). apply ZnotSucBN_sym.
+        assert ( a ⊞ U b <> Z). apply plus_Ub_notZ.
+        destruct H4; 
+         rewrite  H4; rewrite <- H4;
+         rewrite predsucBNinv; rewrite sucpredBNinv; auto.
+      * simpl.
+        assert ( sucBN (a ⊞ U b) = a ⊞ (D b)). rewrite (plusComm a (U b)).
+        rewrite plusSuc. rewrite (plusComm (sucBN (U b)) a). auto.
+        destruct (bnNonZ (sucBN (a ⊞ D b))). apply ZnotSucBN_sym.
+        destruct H1;
+         rewrite H1; rewrite <- H1; rewrite H0; 
+         rewrite predsucBNinv; auto.
+    - simpl.
+      auto.
+Qed.
+
+Lemma plusPred_sym : 
+forall a b : BN ,
+a<> Z -> (predBN a) ⊞ b = predBN ( a ⊞ b).
+Proof.
+  intros.
+  rewrite (plusComm (predBN a) b).
+  rewrite plusPred.
+  rewrite (plusComm b a).
+  auto.
+  auto.
+Qed.
+
+  
+
+
+
+
+
