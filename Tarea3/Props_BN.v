@@ -894,7 +894,7 @@ Admitted.
 Lemma lt_suc_lteq : 
 forall (a b:BN), a <BN b -> (sucBN a) ≤BN b.
 Proof.
-Admitted.
+Admitted. 
 
 Lemma lteqBN_suc: forall (a b:BN), a ≤BN b -> (sucBN a) ≤BN (sucBN b). 
 Proof.
