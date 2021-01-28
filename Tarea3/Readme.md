@@ -4,7 +4,19 @@
 
 El objetivo en la presente tarea es estudiar la implementación de las operaciones hr y lr de los arreglos flexibles usando árboles de Braun. También se verifican las siguientes propiedades relativas a las operaciones:
 
-Los archivos son los siguientes: 
+1. bsize ( lr t ) = pred ( bsize t ) : 
+2. bbal t -> bbal ( lr t )
+3. lookup (lr t ) j = lookup t (suc j)
+4. lr ( le x t ) = t
+5. le ( lookup t Z ) (lr t) = t
+6. bsize ( hr t ) = pred ( bsize t) 
+7. bbal t -> bbal ( hr t)
+8. lookup (hr t) j = lookup t j
+9. hr ( he x t ) = t
+10. he (lookup t pred(bsize t)) (hr t) = t
+
+Cada archivo consta de dos fragmentos, la primera es el código fuente estudiado durante las sesiones del curos y la segunda el código implementado. La verificación consta de los siguientes archivos:
+
 - Props_BN.v : proposiciones verificadas con lógica minimal. 
 - Props_BT.v : proposiciones verificadas con lógica intuicionista. 
 - Defs_BN.v : definiciones y notación para el operador cotenable.
