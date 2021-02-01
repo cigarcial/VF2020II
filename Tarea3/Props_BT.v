@@ -1055,6 +1055,10 @@ Qed.
 
 (*
 Punto 3 :
+La idea de la prueba es la siguiente: 
+  + se hace inducción sobre el árbol t
+  - se analiza el subárbol izquierdo, si es vacío o no
+    y proceder por inducción en los casos donde se requiera
 *)
 Lemma bal_lr : 
 forall (t:BTree), 
@@ -1086,6 +1090,10 @@ Qed.
 
 (*
 Punto 4 :
+La idea de la prueba es la siguiente: 
+  + se hace inducción sobre el árbol t
+  - se analiza el subárbol izquierdo, si es vacío o no
+    y proceder por inducción en los casos donde se requiera
 *)
 Lemma lkp_lr : 
 forall (t:BTree)(j:BN), 
@@ -1149,6 +1157,11 @@ Qed.
 
 (*
 Punto 5 :
+La idea de la prueba es la siguiente: 
+  + se hace inducción sobre el árbol t
+  - se analiza el subárbol izquierdo, si es vacío o no
+    y proceder por inducción en los casos donde se requiera
+    se aplica el hecho que le retorna un árbol no vacío
 *)
 Lemma lr_le : 
 forall (t : BTree)(x : A), 
@@ -1172,6 +1185,10 @@ Qed.
 
 (*
 Punto 6 :
+La idea de la prueba es la siguiente: 
+  + se hace inducción sobre el árbol t
+  - se analiza el subárbol izquierdo, si es vacío o no
+    y proceder por inducción en los casos donde se requiera
 *)
 Lemma le_lkp_lr : 
 forall (t : BTree),
@@ -1204,6 +1221,9 @@ Qed.
 
 (*
 Punto 7 :
+La idea de la prueba es la siguiente: 
+  + se hace inducción sobre los árboles balanceados
+  - corresponde a los casos en que los subárboles tienen el mismo o diferente tamaño
 *)
 Lemma bsize_hr : 
 forall ( t : BTree),
@@ -1278,6 +1298,11 @@ Qed.
 
 (*
 Punto 8 :
+La idea de la prueba es la siguiente: 
+  + se hace inducción sobre el árbol t
+  - se analiza el subárbol izquierdo, si es vacío o no
+    y proceder por inducción en los casos donde se requiera
+  * corresponde a los casos en que los subárboles tienen el mismo o diferente tamaño
 *)
 Lemma bal_hr : 
 forall (t:BTree), 
@@ -1341,6 +1366,11 @@ Qed.
 
 (*
 Punto 9 :
+La idea de la prueba es la siguiente: 
+  + se hace inducción sobre el árbol t
+  - se analiza el subárbol izquierdo, si es vacío o no
+    y proceder por inducción en los casos donde se requiera
+  * corresponde a los casos en que los subárboles tienen el mismo o diferente tamaño
 *)
 Lemma lkp_hr : 
 forall (t:BTree)(j:BN), 
@@ -1432,6 +1462,10 @@ Qed.
 
 (*
 Punto 10 :
+La idea de la prueba es la siguiente: 
+  + se hace inducción sobre el árbol t
+  - corresponde a los casos en que los subárboles tienen el mismo o diferente tamaño
+    se aplica el hecho que he nos retornar un árbol no vacío
 *)
 Lemma hr_he : 
 forall (t : BTree)(x : A), 
@@ -1480,6 +1514,11 @@ Qed.
 
 (*
 Punto 11 :
+La idea de la prueba es la siguiente: 
+  + se hace inducción sobre el árbol t
+  - se analiza el subárbol izquierdo, si es vacío o no
+    y proceder por inducción en los casos donde se requiera
+  * corresponde a los casos en que los subárboles tienen el mismo o diferente tamaño
 *)
 Lemma he_lkp_hr : 
 forall (t : BTree),

@@ -953,7 +953,6 @@ Qed.
 
 
 Lemma not_lt: forall (a b:BN), b ≤BN a -> ~ a <BN b.
-
 Proof.
   unfold not.
   intros.
@@ -971,7 +970,11 @@ Proof.
   induction b.
   + intros. apply lt_noZ in H0. contradiction.
   + intros. destruct a.
-    - admit. (*trico*)
+    - simpl. simpl in H.
+      specialize (trichotomy (U Z) (U b)) as H1.
+      destruct H1; auto.
+      destruct H1; try contradiction.
+        inversion H1. apply lt_noZ in H4. contradiction.
     - simpl.  constructor. inversion H0. auto.
     - simpl. constructor. simpl in H.
       assert ( sucBN a <> b ).
@@ -980,28 +983,57 @@ Proof.
       specialize (IHb a).
       inversion H0.
       apply IHb in H1; auto.
-  + intros. induction a.
-    - admit.
+  + intros. destruct a.
+    - simpl. simpl in H.
+      specialize (trichotomy (U Z) (D b)) as H1.
+      destruct H1; auto.
+      destruct H1; try contradiction.
+        inversion H1. apply lt_noZ in H4. contradiction.
     - simpl. constructor. inversion H0; auto.
       subst. simpl in H. contradiction.
-    - simpl. constructor.
-      simpl in H.
-      inversion H0. subst.
-      admit.
-Admitted.
+    - simpl in H.
+      destruct (dec_eq_BN (sucBN a) b).
+      * simpl in H. simpl. rewrite e. constructor.
+      * simpl. constructor. inversion H0. apply IHb; auto.
+Qed.
 
 
 Lemma lt_suc_lteq :
 forall (b a:BN),
 a <BN b -> (sucBN a) ≤BN b.
 Proof.
-  intros.
+  intro.
   induction b.
-  + destruct a; inversion H.
-  + destruct a. 
-    - simpl. constructor.
-    
-Admitted. 
+  + intros. apply lt_noZ in H. contradiction.
+  + intros. destruct a.
+    - specialize (trichotomy (U Z) (U b)) as H0.
+      destruct H0. 
+        simpl. repeat constructor.
+        inversion H0. auto.
+      destruct H0. 
+        simpl. rewrite H0. constructor.
+        inversion H0. apply lt_noZ in H3. contradiction.
+    - repeat constructor. inversion H. auto.
+    - inversion H. subst. specialize (IHb a).
+      apply IHb in H2. inversion H2.
+      * simpl. constructor.
+      * simpl. repeat constructor. auto.
+  + intros. destruct a.
+    - specialize (trichotomy (U Z) (U b)) as H0.
+      destruct H0. 
+        simpl. repeat constructor.
+        inversion H0. auto.
+      destruct H0. 
+        simpl. rewrite H0. repeat constructor.
+        inversion H0. subst. apply lt_noZ in H3. contradiction.
+    - inversion H.
+      * simpl. constructor.
+      * subst. repeat constructor. auto.
+    - inversion H. subst. specialize (IHb a).
+      apply IHb in H2. inversion H2.
+      * simpl. constructor. constructor.
+      * simpl. constructor. constructor. auto.
+Qed.
 
 Lemma lteqBN_suc: forall (a b:BN), a ≤BN b -> (sucBN a) ≤BN (sucBN b). 
 Proof.
