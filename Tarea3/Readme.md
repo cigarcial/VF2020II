@@ -15,7 +15,7 @@ El objetivo en la presente tarea es estudiar la implementación de las operacion
 9. hr ( he x t ) = t
 10. he (lookup t pred(bsize t)) (hr t) = t
 
-Cada archivo consta de dos fragmentos, la primera es el código fuente estudiado durante las sesiones del curos y la segunda el código implementado. La verificación consta de los siguientes archivos:
+Cada archivo consta de dos fragmentos, la primera es el código fuente estudiado durante las sesiones del curso y la segunda el código implementado. La verificación consta de los siguientes archivos:
 
 - Props_BN.v : proposiciones verificadas con lógica minimal. 
 - Props_BT.v : proposiciones verificadas con lógica intuicionista. 
