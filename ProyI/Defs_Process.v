@@ -82,7 +82,7 @@ match T with
   | Prezero => Prezero
   | Prefuse x y => Prefuse (Open_Name k z x ) (Open_Name k z y )
   | Preparallel P Q => Preparallel (Open_Rec k z P) (Open_Rec k z Q)
-  | Preoutput x y P => Preoutput (Open_Name k z x) (Open_Name k z y) (Open_Rec k z P) 
+  | Preoutput x y P => Preoutput (Open_Name k z x) (Open_Name k z y) (Open_Rec k z P) \/
   | Prechan_zero x => Prechan_zero (Open_Name k z x)
   | Prechan_close x P => Prechan_close (Open_Name k z x) (Open_Rec k z P)
   | Prechan_res P => Prechan_res (Open_Rec (S k) z P)
@@ -219,6 +219,10 @@ Inductive Congruence : Prepro -> Prepro -> Prop :=
       
      | Con_abs_restriction : forall (P Q : Prepro),
         Process P -> Body Q -> (P↓(ν Q)) === ν (P↓Q)
+        
+     | Con_subst : forall (x y : Name) (P : Prepro), 
+        Process P -> ( P === ({y \ x} P))
+        
 where "R '===' S" := (Congruence R S).
 Hint Constructors Congruence : core.
 

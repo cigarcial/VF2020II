@@ -268,6 +268,50 @@ Proof.
       rewrite -> Eq_Subs_Open. auto.
 Qed.
 
+Lemma Open_Process_Is_Process : 
+forall (x : Name)(P : Prepro),
+Process_Name x -> Process P -> Process ( P ^ x) .
+Proof.
+  intros.
+  induction H0.
+  + auto.
+  + inversion H0. inversion H1. subst.
+    unfold Open. simpl. auto.
+  + unfold Open. simpl. constructor; auto.
+  + inversion H0. inversion H1. subst. 
+    unfold Open. simpl. 
+    constructor; auto.
+  + inversion H0. subst.
+    unfold Open. simpl.
+    constructor; auto.
+  + inversion H0. subst.
+    unfold Open. simpl.
+    constructor; auto.
+  + unfold Open. simpl.
+    apply (Chan_res ({1 ~> x} P) L).
+    intros. 
+  
+  
+Admitted.
+
+
+
+Theorem Congruence_WD : 
+forall P Q : Prepro, 
+(P === Q) -> Process(P)  -> Process(Q).
+Proof.
+  intros.
+  induction H; auto.
+  + inversion H0. inversion H5. subst.
+    apply (Chan_res (P ↓ Q) L).
+    intros. unfold Open. simpl.
+    constructor.
+    - specialize (MalDiseno x) as Hx.
+      specialize (Hx L H2).
+      apply Open_Process_Is_Process; auto.
+    - specialize (H7 x H2).
+      auto.
+Qed.
 
 (*
 Resultado fundamental para la representación LNR, al hacer una redución de un proceso se obtiene un proceso.

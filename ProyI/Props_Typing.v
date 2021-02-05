@@ -236,7 +236,8 @@ Proof.
   + apply No_Red_AX1 in H. contradiction.
   + apply No_Red_AX1 in H. contradiction.
   + apply No_Red_AX2 in H. contradiction.
-  + apply No_Red_AX3 in H. contradiction.
+  + 
+  apply No_Red_AX3 in H. contradiction.
   + apply No_Red_AX3 in H. contradiction.
   + apply No_Red_AX2 in H. contradiction.
   + apply No_Red_AX4 in H. contradiction.
