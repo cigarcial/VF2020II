@@ -50,7 +50,7 @@ Inductive Inference : Prepro -> list Assignment -> list Assignment -> list Assig
   | repr : forall ( D : list Assignment ) ( x y : Name)( A : Proposition )( P : Prepro ), 
     Collect D -> Process_Name y -> Process_Name x -> Process P ->
     ( D ;;; nil !- P ::: [ (y:A) ] ) -> 
-    ( D ;;; nil !- (x !· (Close_Rec 0 y P) ) ::: [ (x:!A)  ] )
+    ( D ;;; nil !- (x !· (Close y P) ) ::: [ (x:!A)  ] )
 
 
   | repl : forall ( D F G : list Assignment ) ( u x : Name)( A : Proposition)(P : Prepro ),
@@ -68,46 +68,46 @@ Inductive Inference : Prepro -> list Assignment -> list Assignment -> list Assig
   | conl : forall ( D : list Assignment ) ( y x : Name)( A : Proposition)(P : Prepro ),
     Collect D -> Process_Name y -> Process_Name x -> Process P -> 
     ( D ;;; (cons (y:A) nil) !- P ::: nil ) -> 
-    ( D ;;; (cons (x:? A) nil) !- ( x !· (Close_Rec 0  y P)) ::: nil)
+    ( D ;;; (cons (x:? A) nil) !- ( x !· (Close y P)) ::: nil)
 
 
   | recr : forall ( D F G: list Assignment ) ( y x : Name)( A B : Proposition)(P : Prepro ),
     Collect D -> Collect F -> Collect G -> Process_Name x -> Process_Name y -> Process P -> 
     ( D ;;; ( (cons (y:A) nil) ++ F) !- P ::: ( (cons (x:B) nil) ++ G ) ) -> 
-    ( D ;;; F !- (x · (Close_Rec 0 y P)) ::: ((cons (x:(A−∘B) ) nil) ++ G ) )
+    ( D ;;; F !- (x · (Close y P)) ::: ((cons (x:(A−∘B) ) nil) ++ G ) )
 
 
   | recl : forall ( D F G F' G': list Assignment ) ( y x : Name)( A B : Proposition)(P Q: Prepro ),
     Collect D -> Collect F -> Collect G -> Collect F' -> Collect G' -> Process_Name x -> Process_Name y -> Process P  -> Process Q -> 
     ( D ;;; F !- P ::: ( (cons (y:A) nil) ++ G ) ) ->
     ( D ;;; ((cons (x:B) nil) ++ F') !- Q ::: G' ) ->
-    ( D ;;; ((cons (x:(A−∘B) ) nil) ++ (F ++ F')) !- (ν (Close_Rec 0 y (x « y »· (P↓Q)))) ::: ( G ++ G') )
+    ( D ;;; ((cons (x:(A−∘B) ) nil) ++ (F ++ F')) !- (ν (Close y (x « y »· (P↓Q)))) ::: ( G ++ G') )
 
 
   | reccr : forall ( D F G: list Assignment ) ( y x : Name)( A B : Proposition)(P : Prepro ),
     Collect D -> Collect F -> Collect G -> Process_Name x -> Process_Name y -> Process P -> 
     ( D ;;; F !- P ::: ( (cons (x:B) (cons (y:A) nil) ) ++ G ) ) -> 
-    ( D ;;; F !- (x · (Close_Rec 0 y P)) ::: ((cons (x:(A⅋B) ) nil) ++ G ) )
+    ( D ;;; F !- (x · (Close y P)) ::: ((cons (x:(A⅋B) ) nil) ++ G ) )
 
 
   | reccl  : forall ( D F G F' G': list Assignment ) ( y x : Name)( A B : Proposition)(P Q: Prepro ),
     Collect D -> Collect F -> Collect G -> Collect F' -> Collect G' -> Process_Name x -> Process_Name y -> Process P  -> Process Q -> 
     ( D ;;; ( (cons (y:A) nil) ++ F ) !- P ::: G ) ->
     ( D ;;; ((cons (x:B) nil) ++ F') !- Q ::: G' ) ->
-    ( D ;;; ((cons (x:(A⅋B) ) nil) ++ (F ++ F')) !- (ν (Close_Rec 0 y (x « y »· (P↓Q)))) ::: ( G ++ G') )
+    ( D ;;; ((cons (x:(A⅋B) ) nil) ++ (F ++ F')) !- (ν (Close y (x « y »· (P↓Q)))) ::: ( G ++ G') )
 
 
   | senl : forall ( D F G: list Assignment ) ( y x : Name)( A B : Proposition)(P : Prepro ),
     Collect D -> Collect F -> Collect G -> Process_Name x -> Process_Name y -> Process P -> 
     ( D ;;; ( (cons (x:B) (cons (y:A) nil) ) ++ F) !- P ::: G ) -> 
-    ( D ;;; ( (cons (x:(A⊗B) ) nil) ++ F) !- (x · (Close_Rec 0 y P)) ::: G )
+    ( D ;;; ( (cons (x:(A⊗B) ) nil) ++ F) !- (x · (Close y P)) ::: G )
 
 
   | senr  : forall ( D F G F' G': list Assignment ) ( y x : Name)( A B : Proposition)(P Q: Prepro ),
     Collect D -> Collect F -> Collect G -> Collect F' -> Collect G' -> Process_Name x -> Process_Name y -> Process P  -> Process Q -> 
     ( D ;;; F !- P ::: ( (cons (y:A) nil) ++ G) ) ->
     ( D ;;; F' !- Q ::: ( (cons (x:B) nil) ++ G') ) ->
-    ( D ;;; (F ++ F') !- (ν (Close_Rec 0 y (x « y »· (P↓Q)))) ::: ( (cons (x:(A⊗B)) nil) ++ G ++ G') )
+    ( D ;;; (F ++ F') !- (ν (Close y (x « y »· (P↓Q)))) ::: ( (cons (x:(A⊗B)) nil) ++ G ++ G') )
 
 
   | absr : forall ( D F G: list Assignment )( x : Name) (P : Prepro ),
@@ -135,20 +135,20 @@ Inductive Inference : Prepro -> list Assignment -> list Assignment -> list Assig
   | copyl : forall ( D F G : list Assignment)( x u : Name)( P : Prepro)(A : Proposition),
     Collect D -> Collect F -> Collect G ->  Process_Name x -> Process_Name u -> Process P ->
     ( ( cons (u:A) nil ++ D ) ;;; ( cons (x:A) nil ++ F ) !- P ::: G ) -> 
-    ( ( cons (u:A) nil ++ D ) ;;; F !- (ν (Close_Rec 0 x ( u « x »· P ))) ::: G )
+    ( ( cons (u:A) nil ++ D ) ;;; F !- (ν (Close x ( u « x »· P ))) ::: G )
 
 
   | copyr : forall ( D F G : list Assignment)( x u : Name)( P : Prepro)(A : Proposition),
     Collect D -> Collect F -> Collect G ->  Process_Name x -> Process_Name u -> Process P ->
     ( ( cons (u:A) nil ++ D ) ;;; F !- P ::: ( cons (x:(A^⊥)) nil ++ G) ) -> 
-    ( ( cons (u:A) nil ++ D ) ;;; F !- (ν (Close_Rec 0 x ( u « x »· P ))) ::: G )
+    ( ( cons (u:A) nil ++ D ) ;;; F !- (ν (Close x ( u « x »· P ))) ::: G )
 
 
   | cutcon : forall ( D F G : list Assignment)( x u : Name)( P Q : Prepro )(A : Proposition),
     Collect D -> Collect F -> Collect G ->  Process_Name x -> Process_Name u -> Process P -> Process Q ->
     ( D ;;; nil !- P ::: ( cons (x:A) nil ) ) -> 
     ( ( cons (u:A) nil ++ D ) ;;; F !- Q ::: G ) -> 
-    ( D ;;; F !- (ν (Close_Rec 0 u ( (u !· Close_Rec 0 x P) ↓ Q))) ::: G )
+    ( D ;;; F !- (ν (Close u ( (u !· Close x P) ↓ Q))) ::: G )
 where "D ';;;'  F '!-' P ':::' G" := (Inference P D F G).
 Hint Constructors Inference : core.
 Check Inference_sind.

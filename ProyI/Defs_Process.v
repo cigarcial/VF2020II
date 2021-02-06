@@ -82,7 +82,7 @@ match T with
   | Prezero => Prezero
   | Prefuse x y => Prefuse (Open_Name k z x ) (Open_Name k z y )
   | Preparallel P Q => Preparallel (Open_Rec k z P) (Open_Rec k z Q)
-  | Preoutput x y P => Preoutput (Open_Name k z x) (Open_Name k z y) (Open_Rec k z P) \/
+  | Preoutput x y P => Preoutput (Open_Name k z x) (Open_Name k z y) (Open_Rec k z P)
   | Prechan_zero x => Prechan_zero (Open_Name k z x)
   | Prechan_close x P => Prechan_close (Open_Name k z x) (Open_Rec k z P)
   | Prechan_res P => Prechan_res (Open_Rec (S k) z P)
@@ -90,8 +90,15 @@ match T with
   | Prechan_replicate x P => Prechan_replicate (Open_Name k z x) (Open_Rec (S k) z P)
 end.
 Notation "{ k ~> z } P " := (Open_Rec k z P)(at level 60).
-Definition Open P z := Open_Rec 0 z P.
-Notation "P ^ z" := (Open P z).
+
+Definition Open ( z : Name )( T : Prepro ): Prepro := 
+match T with 
+  | Prechan_res P => Open_Rec 0 z P
+  | Prechan_input x P => Open_Rec 0 z P
+  | Prechan_replicate x P  => Open_Rec 0 z P
+  | T => T
+end.
+Notation "P ^ z" := (Open z P).
 
 
 (*
@@ -124,6 +131,10 @@ match T with
 end.
 
 
+(* *)
+Definition Close ( z : Name )( T : Prepro ): Prepro := Close_Rec 0 z T.
+
+
 (*
 Tal como indica Charguéraud, no todo preproceso resulta ser un proceso bien formado, por lo que se necesita distinguir de aquellos que corresponden con procesos (en el sentido de la definición 2.3) de aquellos que no tienen 'sentido'.
 
@@ -150,23 +161,23 @@ Inductive Process : Prepro -> Prop :=
   | Chan_close : forall (x : Name)(P : Prepro),
     Process_Name x -> Process P -> Process ( x ()· P )
   
-  | Chan_res : forall (P : Prepro)(L : list Name), 
-    ( forall (x : Name), ~ (In x L) -> Process (P ^ x) ) -> Process (ν P)
+  | Chan_res : forall (P : Prepro), 
+    ( forall (x : Name)(L : list Name), Process_Name x -> ~ (In x L) -> Process ({ 0 ~> x }P) ) -> Process (ν P)
   
-  | Chan_input : forall (x : Name ) (P: Prepro)(L : list Name),
-    Process_Name x -> ( forall (x : Name), ~ (In x L) -> Process (P ^ x) ) -> Process ( x · P)
+  | Chan_input : forall (x : Name ) (P: Prepro),
+    Process_Name x -> ( forall (x : Name)(L : list Name), Process_Name x -> ~ (In x L) -> Process ({ 0 ~> x }P) ) -> Process ( x · P)
    
-  | Chan_replicate : forall (x : Name) (P : Prepro)(L : list Name),
-    Process_Name x -> ( forall (x : Name), ~ (In x L) -> Process (P ^ x) ) -> Process ( x !· P ).
+  | Chan_replicate : forall (x : Name) (P : Prepro),
+    Process_Name x -> ( forall (x : Name)(L : list Name), Process_Name x -> ~ (In x L) -> Process ({ 0 ~> x }P) ) -> Process ( x !· P ).
 Hint Constructors Process : core.
-
 
 (*
 Concepto de Body, presente en el artículo de Charguéraud. Es el concepto clave para determinar los procesos bien formados bajo la presencia de una variable ligada.
 
 Intuitivamente una expresión es un body si al tomar una variable libre y remplazar la ocurrencia de la primera ligada, es un término bien formado. Es decir, solo aparece un nombre ligado que no tiene ligadura. 
 *)
-Definition Body (P  : Prepro) := forall (x : Name)(L : list Name), ~ (In x L) -> Process (P ^ x).
+Inductive Body : Prepro -> Prop := 
+  is_body : forall (P : Prepro), (forall (x : Name)(L : list Name), Process_Name x -> ~ (In x L) -> Process ( ({ 0 ~> x }P) )) -> Body(P).
 
 
 (*
@@ -235,11 +246,11 @@ Inductive Reduction : Prepro -> Prepro -> Prop :=
 
   | Red_output_input : forall ( x y : Name ) ( P Q : Prepro ), 
     Process P -> Body Q -> (exists (L : list Name) , ~( In y L ) ) -> 
-    (( (x « y »· P)  ↓ (x · Q) ) --> (P ↓ (Q ^ y )) )
+    (( (x « y »· P)  ↓ (x · Q) ) --> (P ↓ ( {0 ~> y} Q )) )
 
   | Red_parallel_replicate : forall (x y : Name) (P Q : Prepro),
     Process P -> Body Q -> (exists (L : list Name) , ~( In y L ) ) -> 
-      (( (x « y »· P) ↓ (x !· Q )  ) --> ( P ↓ Q^y ↓ (x !· Q) ))
+      (( (x « y »· P) ↓ (x !· Q )  ) --> ( P ↓ ({0 ~> y} Q) ↓ (x !· Q) ))
 
   | Red_chzero_chclose : forall ( Q : Prepro) (x : Name), 
      Process ( x «»·° ) -> Process ( x ()· Q  ) -> 
@@ -254,7 +265,7 @@ Inductive Reduction : Prepro -> Prepro -> Prop :=
 
   | Red_reduction_chanres : forall (P Q : Prepro)( x : Name), 
     Process P -> Process Q -> Process_Name x -> 
-    ( P --> Q ) -> ( ν (Close_Rec 0 x P) --> ν (Close_Rec 0 x Q) )
+    ( P --> Q ) -> ( ν (Close x P) --> ν (Close x Q) )
 (*
   | Red_reduction_congruence : forall ( P Q P' Q' : Prepro ), 
     Process P -> Process Q -> Process P' -> Process Q' 
