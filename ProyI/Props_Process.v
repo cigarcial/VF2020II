@@ -28,15 +28,14 @@ forall ( x : Name),
 Process_Name x.
 
 
-Axiom Eq_Subs_Open :
+Lemma Eq_Subs_Open :
 forall (x y z : Name) ( P :Prepro), 
 ( ( {0 ~> z}({y \ x} P ) )  = ({y \ x} ( {0 ~> z} P ))).
-
-
-Axiom Eq_Proc_Open : 
-forall (x: Name) ( P : Prepro),
-({0 ~> x} P) = P.
-
+Proof.
+  intros.
+  repeat rewrite Ax_Alpha.
+  auto.
+Qed.
 
 (*
 Si dos cadenas son iguales, su valor de verdad en comparación es true
@@ -146,31 +145,21 @@ Process P -> Process_Name x -> Process_Name y ->
 { 0 ~> y} (Close_Rec 0 x P) = {y \ x} P.
 Proof.
   intros.
-  induction H.
+  induction H; simpl.
   + auto.
-  + simpl. 
-    rewrite Eq_Oped_Subst_Name; auto.
-    rewrite Eq_Oped_Subst_Name; auto.
-  + simpl.
-    rewrite IHProcess1.
+  + repeat rewrite Eq_Oped_Subst_Name; auto.
+  + rewrite IHProcess1.
     rewrite IHProcess2.
     auto. 
-  + simpl.
-    rewrite IHProcess.
+  + rewrite IHProcess.
+    repeat rewrite Eq_Oped_Subst_Name; auto.
+  + rewrite Eq_Oped_Subst_Name; auto.
+  + rewrite IHProcess.
     rewrite Eq_Oped_Subst_Name; auto.
-    rewrite Eq_Oped_Subst_Name; auto.
-  + simpl.
-    rewrite Eq_Oped_Subst_Name; auto.
-  + simpl.
-    rewrite IHProcess.
-    rewrite Eq_Oped_Subst_Name; auto.
-  + simpl.
+  + rewrite Eq_Subs_Close_Body; auto.
+  + rewrite Eq_Oped_Subst_Name; auto.
     rewrite Eq_Subs_Close_Body; auto.
-  + simpl. 
-    rewrite Eq_Oped_Subst_Name; auto.
-    rewrite Eq_Subs_Close_Body; auto.
-  + simpl. 
-    rewrite Eq_Oped_Subst_Name; auto.
+  + rewrite Eq_Oped_Subst_Name; auto.
     rewrite Eq_Subs_Close_Body; auto.
 Qed.
 
@@ -245,6 +234,86 @@ Proof.
   auto.
 Qed.
 
+Lemma Eq_Proc_Open_Body :
+forall (P : Prepro)(i : nat)(x : Name), 
+Process_Name x -> {(S i) ~> x} P = P.
+Proof.
+  intro; simpl.
+  induction P; intros; simpl.
+  + auto.
+  + specialize (Ax_Process_Name x) as Hx.
+    specialize (Ax_Process_Name y) as Hy.
+    specialize (Open_PName_Output (S i) x0 x) as HX.
+    rewrite HX; auto.
+    specialize (Open_PName_Output (S i) x0 y) as HY.
+    rewrite HY; auto.
+  + specialize (Ax_Process_Name x) as Hx.
+    rewrite IHP1; auto.
+    rewrite IHP2; auto.
+  + specialize (Ax_Process_Name x) as Hx.
+    specialize (Ax_Process_Name y) as Hy.
+    rewrite IHP; auto.
+    specialize (Open_PName_Output (S i) x0 x) as HX.
+    rewrite HX; auto.
+    specialize (Open_PName_Output (S i) x0 y) as HY.
+    rewrite HY; auto.
+  + specialize (Ax_Process_Name x) as Hx.
+    specialize (Open_PName_Output (S i) x0 x) as HX.
+    rewrite HX; auto.
+  + specialize (Ax_Process_Name x) as Hx.
+    rewrite IHP; auto.
+    specialize (Open_PName_Output (S i) x0 x) as HX.
+    rewrite HX; auto.
+  + rewrite IHP; auto.
+  + specialize (Ax_Process_Name x) as Hx.
+    rewrite IHP; auto.
+    specialize (Open_PName_Output (S i) x0 x) as HX.
+    rewrite HX; auto.
+  + specialize (Ax_Process_Name x) as Hx.
+    rewrite IHP; auto.
+    specialize (Open_PName_Output (S i) x0 x) as HX.
+    rewrite HX; auto.
+Qed.
+
+
+Lemma Eq_Proc_Open : 
+forall (x: Name) ( P : Prepro),
+Process P -> Process_Name x -> ({0 ~> x} P) = P.
+Proof.
+  intros.
+  induction P; simpl.
+  + auto.
+  + inversion H; subst.
+    specialize (Open_PName_Output 0 x x0) as HX.
+    rewrite HX; auto.
+    specialize (Open_PName_Output 0 x y) as HY.
+    rewrite HY; auto.
+  + inversion H; subst.
+    rewrite IHP1; auto.
+    rewrite IHP2; auto.
+  + inversion H.
+    rewrite IHP; auto.
+    specialize (Open_PName_Output 0 x x0) as HX.
+    rewrite HX; auto.
+    specialize (Open_PName_Output 0 x y) as HY.
+    rewrite HY; auto.
+  + inversion H.
+    specialize (Open_PName_Output 0 x x0) as HX.
+    rewrite HX; auto.
+  + inversion H.
+    rewrite IHP; auto.
+    specialize (Open_PName_Output 0 x x0) as HX.
+    rewrite HX; auto.
+  + rewrite Eq_Proc_Open_Body; auto.
+  + inversion H.
+    rewrite Eq_Proc_Open_Body; auto.
+    specialize (Open_PName_Output 0 x x0) as HX.
+    rewrite HX; auto.
+  + inversion H.
+    rewrite Eq_Proc_Open_Body; auto.
+    specialize (Open_PName_Output 0 x x0) as HX.
+    rewrite HX; auto.
+Qed.
 
 (*
 Al tener un proceso y someterlo a un proceso de cerradura, lo que se obtiene es un body.
@@ -447,12 +516,9 @@ Proof.
     - specialize (Open_PName_Output 0 x x0) as HA.
       rewrite HA; auto.
     - auto.
-  + rewrite Eq_Proc_Open.
-    auto.
-  + rewrite Eq_Proc_Open.
-    auto.
-  + rewrite Eq_Proc_Open.
-    auto.
+  + rewrite Eq_Proc_Open; auto.
+  + rewrite Eq_Proc_Open; auto.
+  + rewrite Eq_Proc_Open; auto.
 Qed.
 
 

@@ -1,4 +1,12 @@
 
+Fixpoint Open ( z : Name )( T : Prepro ) {struct T} : Prepro := 
+match T with 
+  | Prechan_res P => Open_Rec 0 z P.
+  | Prechan_input x P => Open_Rec 0 z P.
+  | Prechan_replicate x P  => Open_Rec 0 z P.
+  | _ => Open_Rec 0 z T.
+end.
+
 
 
   induction P.
