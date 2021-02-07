@@ -148,7 +148,7 @@ Inductive Inference : Prepro -> list Assignment -> list Assignment -> list Assig
     Collect D -> Collect F -> Collect G ->  Process_Name x -> Process_Name u -> Process P -> Process Q ->
     ( D ;;; nil !- P ::: ( cons (x:A) nil ) ) -> 
     ( ( cons (u:A) nil ++ D ) ;;; F !- Q ::: G ) -> 
-    ( D ;;; F !- (ν  ( (u !· P) ↓ Q)) ::: G )
+    ( D ;;; F !- (ν Close u ( (u !· Close x P) ↓ Q)) ::: G )
 where "D ';;;'  F '!-' P ':::' G" := (Inference P D F G).
 Hint Constructors Inference : core.
 

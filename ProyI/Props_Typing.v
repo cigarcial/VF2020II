@@ -168,22 +168,112 @@ Proof.
 Qed.
 
 
-Lemma Char_Red_Chanres :
-forall (P Q : Prepro),
-(ν (P) --> Q ) -> 
-exists (Q0 : Prepro), ( Q = (ν (Q0)) /\ P --> Q0).
+(*
+*)
+Lemma Close_Rec_Eq_Subst : 
+forall (P Q : Prepro)(x y : Name)( i: nat),
+Process P -> Process Q -> 
+Close_Rec i x P = Close_Rec i y Q ->
+P = {x\y} Q.
 Proof.
-  intros.
-  inversion H. subst.
-  exists (Close x Q0).
-  split; auto.
+  unfold Close.
+  intro.
+  induction P; intros; try destruct Q; try simpl in H1; try discriminate; auto.
+  + simpl.
+    inversion H1.
+    admit.
+  + simpl.
+    inversion H.
+    rewrite (IHP1 Q1 x y i); auto.
+    rewrite (IHP2 Q2 x y i); auto.
+  + inversion H.
+    simpl.
+    rewrite (IHP Q x0 y0 i); auto.
+    admit.
+  + admit.
+  + inversion H.
+    simpl.
+    rewrite (IHP Q x0 y i); auto.
+    admit.
+  + inversion H.
+    simpl.
+    rewrite (IHP Q x y (S i)); auto.
+  + inversion H.
+    simpl. 
+    rewrite (IHP Q x0 y (S i)); auto.
+    admit.
+  + inversion H.
+    simpl. 
+    rewrite (IHP Q x0 y (S i)); auto.
+    admit.
 Admitted.
 
 
+(*
+*)
+Lemma Proc_Valid_V1 :
+forall (P Q : Prepro)( u x : Name),
+Process_Name u -> Process_Name x -> Process P -> Process Q -> 
+Process ((u !· Close x P) ↓ Q).
+Proof.
+  intros.
+  constructor; auto.
+  specialize ( Close_Is_Body x P) as HB.
+  specialize ( HB H0 H1).
+  inversion HB.
+  constructor; auto.
+Qed.
+
+
+(*
+*)
+Lemma AuX1 : 
+forall (P : Prepro)(x y : Name),
+Close x P = Close y ({y\x}P).
+Proof.
+  unfold Close.
+  intro.
+  induction P; intros.
+  + auto.
+  + simpl.
+    
+    admit.
+  + admit.
+  + admit.
+  + admit.
+  + admit.
+  + admit.
+  + admit.
+  + admit.
+Admitted.
+
+
+Lemma Char_Red_Chanres2 :
+forall (P Q : Prepro)(x : Name),
+Process P -> (ν (Close x P) --> Q ) -> 
+exists (Q0 : Prepro), ( Q = (ν (Close x Q0)) /\ P --> Q0).
+Proof.
+  intros.
+  inversion H0; subst.
+  exists ({x\x0}Q0).
+  split.
+  + specialize (AuX1 Q0 x0 x) as HX.
+    rewrite HX.
+    auto.
+  + specialize (Close_Rec_Eq_Subst P0 P x0 x 0) as HT.
+    specialize (HT H2 H H1).
+    rewrite Ax_Alpha in HT.
+    rewrite Ax_Alpha.
+    rewrite <- HT.
+    auto.
+Qed.
+
+(*
+*)
 Lemma Char_Red_Arr :
-forall (u : Name)(P Q0 Q1 : Prepro),
-( ((u !· P) ↓ Q0) --> Q1 ) -> 
-(exists (Q2 : Prepro), ( Q1 = ((u !· P) ↓ Q2) /\ Q0 --> Q2 )).
+forall (u x: Name)(P Q0 Q1 : Prepro),
+( ((u !· Close x P) ↓ Q0) --> Q1 ) -> 
+(exists (Q2 : Prepro), ( Q1 = ((u !· Close x P) ↓ Q2) /\ Q0 --> Q2 )).
 Proof.
   intros.
   inversion H; subst.
@@ -191,6 +281,7 @@ Proof.
   + exists R.
     split; auto.
 Admitted.
+
 
 
 Theorem Soundness : 
@@ -224,12 +315,14 @@ Proof.
   + apply No_Red_AX8 in H1. contradiction.
   + apply No_Red_AX7 in H6; try contradiction; auto. 
   + apply No_Red_AX7 in H6; try contradiction; auto.
-  + specialize (Char_Red_Chanres  ((u !· P) ↓ Q) Q0 ) as HX.
-    specialize (HX H8).
-    destruct HX as [Q1 H9].
+  + specialize (Char_Red_Chanres2  ((u !· Close x P) ↓ Q) Q0 u) as HU.
+    specialize (Proc_Valid_V1 P Q u x) as HV.
+    specialize (HV H3 H2 H4 H5).
+    specialize (HU HV H8).
+    destruct HU as [Q1 H9].
     destruct H9.
     rewrite H9.
-    specialize (Char_Red_Arr u P Q Q1) as HT.
+    specialize (Char_Red_Arr u x P Q Q1) as HT.
     specialize (HT H10).
     destruct HT as [Q2 H11].
     destruct H11.
@@ -237,5 +330,28 @@ Proof.
     apply (cutcon D F G x u P Q2 A); auto.
     apply (ProcessReduction_WD Q Q2); auto.
 Qed.
+
+
+
+    
+    
+Lemma Char_Red_Arr :
+forall (u : Name)(P Q0 Q1 : Prepro),
+( ((u !· P) ↓ Q0) --> Q1 ) -> 
+(exists (Q2 : Prepro), ( Q1 = ((u !· P) ↓ Q2) /\ Q0 --> Q2 )).
+Proof.
+  intros.
+  inversion H; subst.
+  + admit.
+  + exists R.
+    split; auto.
+Admitted.
+
+
+Lemma Close_Name_Subst :
+forall (x0 x y0 y: Name )( i : nat),
+Close_Name i x0 x = Close_Name i y0 y.
+Proof.
+Admitted.
 
 
