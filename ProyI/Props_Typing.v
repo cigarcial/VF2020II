@@ -158,45 +158,84 @@ Proof.
     auto.
 Qed.
 
-
-(*
-*)
 Lemma No_Red_AX8 : 
-forall ( u x : Name) (P Q R : Prepro),
-(ν Close_Rec 0 u ((u !· Close_Rec 0 x P) ↓ Q) --> R) -> exists (Q0 : Prepro),( R = ν Close_Rec 0 u ((u !· Close_Rec 0 x P) ↓ Q0) /\ Q --> Q0).
+forall (x : Name)( Q : Prepro),
+~ ((x «»·°) --> Q).
+Proof.
+  unfold not.
+  intros.
+  induction Q; try inversion H.
+Qed.
+
+
+Lemma Char_Red_Chanres :
+forall (P Q : Prepro),
+(ν (P) --> Q ) -> 
+exists (Q0 : Prepro), ( Q = (ν (Q0)) /\ P --> Q0).
+Proof.
+  intros.
+  inversion H. subst.
+  exists (Close x Q0).
+  split; auto.
+Admitted.
+
+
+Lemma Char_Red_Arr :
+forall (u : Name)(P Q0 Q1 : Prepro),
+( ((u !· P) ↓ Q0) --> Q1 ) -> 
+(exists (Q2 : Prepro), ( Q1 = ((u !· P) ↓ Q2) /\ Q0 --> Q2 )).
+Proof.
+  intros.
+  inversion H; subst.
+  + admit.
+  + exists R.
+    split; auto.
 Admitted.
 
 
 Theorem Soundness : 
-forall (D F G : list Assignment)(P Q : Prepro),
-  (P --> Q) -> ( D ;;; F !- P ::: G )
-  -> ( D ;;; F !- Q ::: G ).
+forall (P : Prepro)(D F G : list Assignment),
+  ( D ;;; F !- P ::: G ) -> (forall (Q: Prepro), (P --> Q)
+  -> ( D ;;; F !- Q ::: G )).
 Proof.
-  intros.  
-  induction H0.
-  + apply No_Red_AX1 in H. contradiction.
-  + apply No_Red_AX1 in H. contradiction.
-  + apply No_Red_AX2 in H. contradiction.
-  + rewrite Ax_Alpha in H.
+  intros P D F G H.
+  induction H; intros.
+  + apply No_Red_AX1 in H2. contradiction.
+  + apply No_Red_AX1 in H2. contradiction.
+  + apply No_Red_AX2 in H4. contradiction.
+  + rewrite Ax_Alpha in H6.
     rewrite <- (Ax_Alpha u x Q). 
     constructor; auto.
     apply (ProcessReduction_WD P Q); auto.
-  + rewrite Ax_Alpha in H.
+  + rewrite Ax_Alpha in H6.
     rewrite <- (Ax_Alpha u x Q). 
     constructor; auto.
     apply (ProcessReduction_WD P Q); auto.
-  + apply No_Red_AX2 in H. contradiction.
-  + apply No_Red_AX4 in H. contradiction.
-  + apply No_Red_AX5 in H; try contradiction; auto.
-  + apply No_Red_AX4 in H. contradiction.
-  + apply No_Red_AX5 in H; try contradiction; auto.
-  + apply No_Red_AX4 in H. contradiction.
-  + apply No_Red_AX5 in H; try contradiction; auto.
-  + apply No_Red_AX6 in H. contradiction.
-  + inversion H.
-  + apply No_Red_AX6 in H. contradiction.
-  + inversion H.
-  + apply No_Red_AX7 in H; try contradiction; auto. 
-  + apply No_Red_AX7 in H; try contradiction; auto.
-  + admit.
-Admitted.
+  + apply No_Red_AX2 in H4. contradiction.
+  + apply No_Red_AX4 in H6. contradiction.
+  + apply No_Red_AX5 in H10; try contradiction; auto.
+  + apply No_Red_AX4 in H6. contradiction.
+  + apply No_Red_AX5 in H10; try contradiction; auto.
+  + apply No_Red_AX4 in H6. contradiction.
+  + apply No_Red_AX5 in H10; try contradiction; auto.
+  + apply No_Red_AX6 in H5. contradiction.
+  + apply No_Red_AX8 in H1. contradiction.
+  + apply No_Red_AX6 in H5. contradiction.
+  + apply No_Red_AX8 in H1. contradiction.
+  + apply No_Red_AX7 in H6; try contradiction; auto. 
+  + apply No_Red_AX7 in H6; try contradiction; auto.
+  + specialize (Char_Red_Chanres  ((u !· P) ↓ Q) Q0 ) as HX.
+    specialize (HX H8).
+    destruct HX as [Q1 H9].
+    destruct H9.
+    rewrite H9.
+    specialize (Char_Red_Arr u P Q Q1) as HT.
+    specialize (HT H10).
+    destruct HT as [Q2 H11].
+    destruct H11.
+    rewrite H11.
+    apply (cutcon D F G x u P Q2 A); auto.
+    apply (ProcessReduction_WD Q Q2); auto.
+Qed.
+
+
