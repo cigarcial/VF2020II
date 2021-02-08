@@ -144,11 +144,19 @@ Inductive Inference : Prepro -> list Assignment -> list Assignment -> list Assig
     ( ( cons (u:A) nil ++ D ) ;;; F !- (ν (Close x ( u « x »· P ))) ::: G )
 
 
-  | cutcon : forall ( D F G : list Assignment)( x u : Name)( P Q : Prepro )(A : Proposition),
+  | cutrep : forall ( D F G : list Assignment)( x u : Name)( P Q : Prepro )(A : Proposition),
     Collect D -> Collect F -> Collect G ->  Process_Name x -> Process_Name u -> Process P -> Process Q ->
     ( D ;;; nil !- P ::: ( cons (x:A) nil ) ) -> 
-    ( ( cons (u:A) nil ++ D ) ;;; F !- Q ::: G ) -> 
+    ( D ;;; (cons (u:A) nil ++ F) !- Q ::: G ) -> 
     ( D ;;; F !- (ν Close u ( (u !· Close x P) ↓ Q)) ::: G )
+
+
+  | cutcon : forall ( D F G : list Assignment)( x u : Name)( P Q : Prepro )(A : Proposition),
+    Collect D -> Collect F -> Collect G ->  Process_Name x -> Process_Name u -> Process P -> Process Q ->
+    ( D ;;; ( cons (x:(A^⊥)) nil ) !- P ::: nil ) -> 
+    ( D ;;; (cons (u:A) nil ++ F) !- Q ::: G ) -> 
+    ( D ;;; F !- (ν Close u ( (u !· Close x P) ↓ Q)) ::: G )  
+
 where "D ';;;'  F '!-' P ':::' G" := (Inference P D F G).
 Hint Constructors Inference : core.
 

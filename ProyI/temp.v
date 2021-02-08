@@ -141,7 +141,26 @@ inversion H.
 
 
 
+    
+    
+Lemma Char_Red_Arr :
+forall (u : Name)(P Q0 Q1 : Prepro),
+( ((u !· P) ↓ Q0) --> Q1 ) -> 
+(exists (Q2 : Prepro), ( Q1 = ((u !· P) ↓ Q2) /\ Q0 --> Q2 )).
+Proof.
+  intros.
+  inversion H; subst.
+  + admit.
+  + exists R.
+    split; auto.
+Admitted.
 
+
+Lemma Close_Name_Subst :
+forall (x0 x y0 y: Name )( i : nat),
+Close_Name i x0 x = Close_Name i y0 y.
+Proof.
+Admitted.
 
 
 

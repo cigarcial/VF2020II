@@ -10,9 +10,43 @@ From Coq Require Import Strings.String.
 From PROYI Require Import Props_Process.
 
 
+
+(*
+Lo siguientes lemas son intuitivamente ciertos, sin embargo su prueba 
+es difícil teniendo en cuenta que necesitan la idea que x aparece en P para que la operación  Close_Rec i x P tenga sentido. 
+*)
+Lemma Close_Rec_Eq_Subst : 
+forall (P Q : Prepro)(x y : Name)( i: nat),
+Process P -> Process Q -> 
+Close_Rec i x P = Close_Rec i y Q ->
+P = {x\y} Q.
+Proof.
+Admitted.
+
+
+Lemma Eq_Change_Var_Close : 
+forall (P : Prepro)(x y : Name),
+Close x P = Close y ({y\x}P).
+Admitted.
+
+
+(*
+*)
+Lemma Char_Red_Arr :
+forall (u x: Name)(P Q0 Q1 : Prepro),
+( ((u !· Close x P) ↓ Q0) --> Q1 ) -> 
+(exists (Q2 : Prepro), ( Q1 = ((u !· Close x P) ↓ Q2) /\ Q0 --> Q2 )).
+Proof.
+  intros.
+  inversion H; subst.
+  + admit.
+  + exists R.
+    split; auto.
+Admitted.
+
+
 (*
 Los siguientes lemas apoyan la prueba del teorema 2.1, determinan que algunos de los casos no se reducen a algo.
-
 *)
 Lemma No_Red_AX1 : 
 forall (x y : Name)(Q : Prepro), 
@@ -23,6 +57,9 @@ Proof.
   inversion H.
 Qed.
 
+
+(*
+*)
 Lemma No_Red_AX2 : 
 forall (x y : Name)(P Q : Prepro), 
 ~ ((x !· Close_Rec 0 y P) --> Q).
@@ -32,6 +69,9 @@ Proof.
   inversion H.
 Qed.
 
+
+(*
+*)
 Lemma No_Red_AX4 : 
 forall (x : Name)(P Q: Prepro),
 ~( (x · P) --> Q ).
@@ -44,6 +84,8 @@ Qed.
 Check No_Red_AX4.
 
 
+(*
+*)
 Lemma No_Red_AX51 : 
 forall (x y : Name)(P Q R: Prepro), 
 ~( (x « y »· (P ↓ Q)) --> R ).
@@ -54,6 +96,8 @@ Proof.
 Qed.
 
 
+(*
+*)
 Lemma No_Red_AX52 : 
 forall (x : Name)(P Q: Prepro), 
 (P = Q ) -> (Open_Rec 0 x P = Open_Rec 0 x Q).
@@ -64,6 +108,8 @@ Proof.
 Qed.
 
 
+(*
+*)
 Lemma No_Red_AX55 : 
 forall ( x y : Name), 
 Process_Name x -> Process_Name y -> (Open_Name 0 x (Close_Name 0 y y)) = x.
@@ -132,6 +178,7 @@ Qed.
 
 
 (*
+Caso 7 no reduce a nada
 *)
 Lemma No_Red_AX7 :
 forall ( x u : Name)( P Q : Prepro),
@@ -158,6 +205,10 @@ Proof.
     auto.
 Qed.
 
+
+(*
+El caso 8 no reduce a nada
+*)
 Lemma No_Red_AX8 : 
 forall (x : Name)( Q : Prepro),
 ~ ((x «»·°) --> Q).
@@ -169,47 +220,7 @@ Qed.
 
 
 (*
-*)
-Lemma Close_Rec_Eq_Subst : 
-forall (P Q : Prepro)(x y : Name)( i: nat),
-Process P -> Process Q -> 
-Close_Rec i x P = Close_Rec i y Q ->
-P = {x\y} Q.
-Proof.
-  unfold Close.
-  intro.
-  induction P; intros; try destruct Q; try simpl in H1; try discriminate; auto.
-  + simpl.
-    inversion H1.
-    admit.
-  + simpl.
-    inversion H.
-    rewrite (IHP1 Q1 x y i); auto.
-    rewrite (IHP2 Q2 x y i); auto.
-  + inversion H.
-    simpl.
-    rewrite (IHP Q x0 y0 i); auto.
-    admit.
-  + admit.
-  + inversion H.
-    simpl.
-    rewrite (IHP Q x0 y i); auto.
-    admit.
-  + inversion H.
-    simpl.
-    rewrite (IHP Q x y (S i)); auto.
-  + inversion H.
-    simpl. 
-    rewrite (IHP Q x0 y (S i)); auto.
-    admit.
-  + inversion H.
-    simpl. 
-    rewrite (IHP Q x0 y (S i)); auto.
-    admit.
-Admitted.
-
-
-(*
+Construcción de un tipo de Proceso.
 *)
 Lemma Proc_Valid_V1 :
 forall (P Q : Prepro)( u x : Name),
@@ -226,28 +237,8 @@ Qed.
 
 
 (*
+Caracteriza la reducción de un proceso como el de la hipótesis.
 *)
-Lemma AuX1 : 
-forall (P : Prepro)(x y : Name),
-Close x P = Close y ({y\x}P).
-Proof.
-  unfold Close.
-  intro.
-  induction P; intros.
-  + auto.
-  + simpl.
-    
-    admit.
-  + admit.
-  + admit.
-  + admit.
-  + admit.
-  + admit.
-  + admit.
-  + admit.
-Admitted.
-
-
 Lemma Char_Red_Chanres2 :
 forall (P Q : Prepro)(x : Name),
 Process P -> (ν (Close x P) --> Q ) -> 
@@ -257,7 +248,7 @@ Proof.
   inversion H0; subst.
   exists ({x\x0}Q0).
   split.
-  + specialize (AuX1 Q0 x0 x) as HX.
+  + specialize (Eq_Change_Var_Close Q0 x0 x) as HX.
     rewrite HX.
     auto.
   + specialize (Close_Rec_Eq_Subst P0 P x0 x 0) as HT.
@@ -268,22 +259,10 @@ Proof.
     auto.
 Qed.
 
+
 (*
+Teorema 2.1 del artículo.
 *)
-Lemma Char_Red_Arr :
-forall (u x: Name)(P Q0 Q1 : Prepro),
-( ((u !· Close x P) ↓ Q0) --> Q1 ) -> 
-(exists (Q2 : Prepro), ( Q1 = ((u !· Close x P) ↓ Q2) /\ Q0 --> Q2 )).
-Proof.
-  intros.
-  inversion H; subst.
-  + admit.
-  + exists R.
-    split; auto.
-Admitted.
-
-
-
 Theorem Soundness : 
 forall (P : Prepro)(D F G : list Assignment),
   ( D ;;; F !- P ::: G ) -> (forall (Q: Prepro), (P --> Q)
@@ -327,31 +306,22 @@ Proof.
     destruct HT as [Q2 H11].
     destruct H11.
     rewrite H11.
+    apply (cutrep D F G x u P Q2 A); auto.
+    apply (ProcessReduction_WD Q Q2); auto.
+  + specialize (Char_Red_Chanres2  ((u !· Close x P) ↓ Q) Q0 u) as HU.
+    specialize (Proc_Valid_V1 P Q u x) as HV.
+    specialize (HV H3 H2 H4 H5).
+    specialize (HU HV H8).
+    destruct HU as [Q1 H9].
+    destruct H9.
+    rewrite H9.
+    specialize (Char_Red_Arr u x P Q Q1) as HT.
+    specialize (HT H10).
+    destruct HT as [Q2 H11].
+    destruct H11.
+    rewrite H11.
     apply (cutcon D F G x u P Q2 A); auto.
     apply (ProcessReduction_WD Q Q2); auto.
 Qed.
-
-
-
-    
-    
-Lemma Char_Red_Arr :
-forall (u : Name)(P Q0 Q1 : Prepro),
-( ((u !· P) ↓ Q0) --> Q1 ) -> 
-(exists (Q2 : Prepro), ( Q1 = ((u !· P) ↓ Q2) /\ Q0 --> Q2 )).
-Proof.
-  intros.
-  inversion H; subst.
-  + admit.
-  + exists R.
-    split; auto.
-Admitted.
-
-
-Lemma Close_Name_Subst :
-forall (x0 x y0 y: Name )( i : nat),
-Close_Name i x0 x = Close_Name i y0 y.
-Proof.
-Admitted.
 
 
