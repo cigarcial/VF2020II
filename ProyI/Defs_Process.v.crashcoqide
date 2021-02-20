@@ -214,6 +214,8 @@ Inductive Process : Prepro -> Prop :=
   | Chan_replicate : forall (x : Name) (P : Prepro),
     Process_Name x -> 
     ( forall L : FVarsE, Finite _ L -> forall (x : nat), ~( x ∈ L ) -> Process ({ 0 ~> x }P) ) -> Process ( x !· P ).
+Check Process_ind.
+
 Hint Constructors Process : core.
 
 
@@ -263,6 +265,7 @@ Hint Constructors Process : core.
 
 
 
+
 (*
 Sustitución de nombres, observe que bajo LNR no tiene sentido la sustitución de nombres ligados.
 *)
@@ -288,10 +291,6 @@ match T with
 end.
 Notation " { y \ x } P " := (Subst x y P) (at level 60). 
 
-
-Inductive Well_Subst : Prepro -> nat -> nat -> Prop := 
-  | Is_Well_Subst : forall ( P : Prepro)(x y : nat),
-    ( forall( k z : nat), Process( {y \ x } ( {k~>z} P) ) -> x <> z ) -> (Well_Subst P x y).
 
 
 
@@ -340,7 +339,7 @@ Inductive Reduction : Prepro -> Prepro -> Prop :=
      ( ( ( x «»·° ) ↓ ( x ()· Q ) ) -->  Q )
 
   | Red_parallel_fuse : forall ( x y : nat) ( P : Prepro),
-    Process P -> Well_Subst P x y ->
+    Process P ->
     ( (P ↓ [(FName x)←→(FName y)]) --> (Subst x y P) )
 
   | Red_reduction_parallel : forall ( P Q R : Prepro), 
@@ -359,8 +358,7 @@ where "R '-->' S" := (Reduction R S).
 Hint Constructors Reduction : core.
 
 
-Check Process_ind.
-Check Prepro_ind.
+
 
 
 
