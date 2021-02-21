@@ -3,46 +3,15 @@
   Ciro Iván García López
   Proyecto 1. Session Type Systems Verification
 *)
-From PROYI Require Import  Defs_Typing.
-From PROYI Require Import  Defs_Process.
-From PROYI Require Import  Defs_Proposition.
-From Coq Require Import Strings.String.
+From Coq Require Import Bool.Bool.
+From Coq Require Import Arith.PeanoNat.
+From Coq Require Import Arith.EqNat.
+
+From PROYI Require Import Defs_Typing.
+From PROYI Require Import Defs_Process.
+From PROYI Require Import Defs_Proposition.
 From PROYI Require Import Props_Process.
-
-
-
-(*
-Lo siguientes lemas son intuitivamente ciertos, sin embargo su prueba 
-es difícil teniendo en cuenta que necesitan la idea que x aparece en P para que la operación  Close_Rec i x P tenga sentido. 
-*)
-Lemma Close_Rec_Eq_Subst : 
-forall (P Q : Prepro)(x y : Name)( i: nat),
-Process P -> Process Q -> 
-Close_Rec i x P = Close_Rec i y Q ->
-P = {x\y} Q.
-Proof.
-Admitted.
-
-
-Lemma Eq_Change_Var_Close : 
-forall (P : Prepro)(x y : Name),
-Close x P = Close y ({y\x}P).
-Admitted.
-
-
-(*
-*)
-Lemma Char_Red_Arr :
-forall (u x: Name)(P Q0 Q1 : Prepro),
-( ((u !· Close x P) ↓ Q0) --> Q1 ) -> 
-(exists (Q2 : Prepro), ( Q1 = ((u !· Close x P) ↓ Q2) /\ Q0 --> Q2 )).
-Proof.
-  intros.
-  inversion H; subst.
-  + admit.
-  + exists R.
-    split; auto.
-Admitted.
+From PROYI Require Import Facts_Process.
 
 
 (*
@@ -54,14 +23,14 @@ forall (x y : Name)(Q : Prepro),
 Proof. 
   unfold not.
   intros.
-  inversion H.
+  inversions H.
 Qed.
 
 
 (*
 *)
 Lemma No_Red_AX2 : 
-forall (x y : Name)(P Q : Prepro), 
+forall ( x : Name )( y : nat )( P Q : Prepro ), 
 ~ ((x !· Close_Rec 0 y P) --> Q).
 Proof.
   unfold not.
@@ -86,7 +55,7 @@ Check No_Red_AX4.
 
 (*
 *)
-Lemma No_Red_AX51 : 
+Lemma No_Red_AX51 :
 forall (x y : Name)(P Q R: Prepro), 
 ~( (x « y »· (P ↓ Q)) --> R ).
 Proof.
@@ -98,58 +67,35 @@ Qed.
 
 (*
 *)
-Lemma No_Red_AX52 : 
-forall (x : Name)(P Q: Prepro), 
-(P = Q ) -> (Open_Rec 0 x P = Open_Rec 0 x Q).
-Proof.
-  intros.
-  rewrite <- H.
-  auto.
-Qed.
-
-
-(*
-*)
-Lemma No_Red_AX55 : 
-forall ( x y : Name), 
-Process_Name x -> Process_Name y -> (Open_Name 0 x (Close_Name 0 y y)) = x.
-Proof.
-  intros.
-  inversion H; inversion H0; subst.
-  specialize (string_dec x1 x1) as HX.
-  destruct HX.
-  + specialize (Str_True x1 x1) as HB.
-    simpl.
-    rewrite HB; auto.
-  + contradiction.
-Qed.
-
-
-(*
-*)
 Lemma No_Red_AX5 : 
-forall (x y : Name)(P Q R: Prepro), 
-Process_Name x -> Process_Name y -> Process P -> Process Q ->
-~( (ν Close_Rec 0 y (x « y »· (P ↓ Q))) --> R ).
+forall (x : Name)(y : nat)(P Q R: Prepro), 
+Process_Name x -> Process P -> Process Q ->
+~( (ν Close_Rec 0 y (x « (FName y) »· (P ↓ Q))) --> R ).
 Proof.
   unfold not.
   intros.
-  inversion H3; subst.
-  apply (No_Red_AX52 x0 _ _ ) in H4.
-  unfold Close in H4.
-  rewrite Eq_Subs_Close in H4; auto.
-  simpl in H4.
-  specialize (Close_Name_Output 0 y x) as HX.
-  rewrite No_Red_AX55 in H4; auto.
-  rewrite Eq_Subs_Close in H4; auto.
-  rewrite Eq_Subs_Close in H4; auto.
-  do 3 rewrite Ax_Alpha in H4.
-  rewrite H4 in H8.
-  destruct HX;
-    try rewrite H9 in H8;
-    try specialize (Open_PName_Output 0 x0 x) as HX || specialize (Open_BName_Output 0 x0) as HX;
-    try rewrite HX in H8;
-    try apply No_Red_AX51 in H8; auto.
+  inversions H2.
+  inversions H.
+  apply (Equal_Prepro_Equal_Open x0 _ _ ) in H3.
+  unfold Close in H3.
+  rewrite Process_Open_Close_Subst in H3; auto.
+  simpl in H3.
+  fold (Close_Name 0 y (FName y)) in H3.
+  repeat rewrite No_Red_AX55 in H3.
+  rewrite Process_Open_Close_Subst in H3; auto.
+  rewrite Process_Open_Close_Subst in H3; auto.
+  rewrite Subst_By_Equal in H3.
+  rewrite H3 in H6.
+  destruct (bool_dec (x1 =? y) true).
+  + rewrite e in H6.
+    simpl in H6.
+    apply No_Red_AX51 in H6.
+    contradiction.
+  + apply not_true_iff_false in n.
+    rewrite n in H6.
+    simpl in H6.
+    apply No_Red_AX51 in H6.
+    contradiction.
 Qed.
 
 
@@ -325,3 +271,35 @@ Proof.
 Qed.
 
 
+(*
+Lo siguientes lemas son intuitivamente ciertos, sin embargo su prueba 
+es difícil teniendo en cuenta que necesitan la idea que x aparece en P para que la operación  Close_Rec i x P tenga sentido. 
+*)
+Lemma Close_Rec_Eq_Subst : 
+forall (P Q : Prepro)(x y : nat)( i: nat),
+Process P -> Process Q -> 
+Close_Rec i x P = Close_Rec i y Q ->
+P = {x\y} Q.
+Proof.
+Admitted.
+
+
+Lemma Eq_Change_Var_Close : 
+forall (P : Prepro)(x y : nat),
+Close x P = Close y ({y\x}P).
+Admitted.
+
+
+(*
+*)
+Lemma Char_Red_Arr :
+forall ( u : Name )( x : nat )( P Q0 Q1 : Prepro ),
+( ((u !· Close x P) ↓ Q0) --> Q1 ) -> 
+(exists (Q2 : Prepro), ( Q1 = ((u !· Close x P) ↓ Q2) /\ Q0 --> Q2 )).
+Proof.
+  intros.
+  inversion H; subst.
+  + admit.
+  + exists R.
+    split; auto.
+Admitted.

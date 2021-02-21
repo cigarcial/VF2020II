@@ -9,6 +9,9 @@ From Coq Require Import Ensembles.
 From Coq Require Import Finite_sets.
 From Coq Require Import Finite_sets_facts.
 
+Ltac inversions H := inversion H; subst.
+Ltac isBody := constructor; intros; simpl; repeat constructor.
+
 
 (*
 Se llaman algunas definiciones de conjuntos finitos para el manejo del conjunto de variables libres (FVar).
@@ -261,7 +264,7 @@ Inductive Process_At : nat -> Prepro -> Prop :=
     Process_Name_At k x -> Process_At (S k) P -> Process_At k ( x !· P ).
 Hint Constructors Process : core.
 
-
+Check Process_At_ind.
 
 (*
 Sustitución de nombres, observe que bajo LNR no tiene sentido la sustitución de nombres ligados.
@@ -351,9 +354,9 @@ Inductive Reduction : Prepro -> Prepro -> Prop :=
     Process P -> Process Q ->
     ( P --> Q ) -> ( ν (Close x P) --> ν (Close x Q) )
 
-  | Red_reduction_congruence : forall ( P Q P' Q' : Prepro ),
+(*   | Red_reduction_congruence : forall ( P Q P' Q' : Prepro ),
     Process P' -> Congruence P' P -> Congruence Q' Q ->
-    (P' --> Q') -> (P --> Q)
+    (P' --> Q') -> (P --> Q) *)
 
 where "R '-->' S" := (Reduction R S).
 Hint Constructors Reduction : core.
